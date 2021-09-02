@@ -1,0 +1,51 @@
+@import "../../../variables.less";
+
+.custom-file-upload{
+  width: 300px;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  max-height: 250px;
+  border: 1px solid lightgrey;
+  flex-direction: column;
+}
+
+.img-wrap{
+  width: 300px;
+  overflow: hidden;
+  position: relative;
+}
+
+.upload__img{
+  object-fit: contain;
+  width: 300px;
+  height: 250px;
+}
+
+.img-upload__icon{
+  content: "\f093";
+  font-size: 90px !important;
+  position: absolute;
+  padding-top: 80px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  color: lightgrey;
+  width: 200px !important;
+  height: 200px !important;
+  border-radius: 50%;
+  opacity: 0 !important;
+  transition: .5s ease;
+  background-color: #fff;
+  border: 1px solid @primary-color;
+}
+
+.img-upload:hover .img-upload__icon{
+  opacity: 1 !important;
+ }
+
+input[type="file"] {
+  display: none;
+}

@@ -1,0 +1,70 @@
+/* Grid margin */
+.page__grid {
+  /*padding-top: 1rem !important;*/
+  overflow-x: hidden;
+  margin-top: 0rem !important;
+  background: transparent !important;
+  overflow-y: scroll;
+  margin-left: 0rem !important;
+  height: auto !important;
+}
+
+.dashboard__box {
+  width: 100%;
+  display: flex;
+  max-height: 120px;
+  min-height: 100px;
+  overflow-y: hidden;
+  border: 1px solid lightgrey !important;
+  border-radius: 0 i !important;
+  margin: 10px;
+  justify-content: center;
+  align-items: center;
+}
+
+.no__border {
+  border: none !important;
+}
+
+/* top navigation */
+.dashboard_item__link {
+  color: black;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.subtitle {
+  text-align: center;
+  font-size: 1.9rem !important;
+}
+
+.search__input {
+  width: 300px;
+}
+
+@media only screen and (max-width:768px) {
+  .search__input {
+    width: 100%;
+  }
+}
+
+/* table list */
+.ui.table td {
+  padding: 5px 5px;
+}
+
+.subscribers__table {
+  overflow-x: hidden;
+  overflow-y: scroll;
+  height: 100%;
+  display: block;
+  flex: 1;
+  max-height: calc(100vh - 250px);
+  padding-bottom: 10px;
+}
+
+@media only screen and (max-width:768px) {
+  .subscribers__table {
+    max-height: calc(100vh - 280px);
+  }
+}

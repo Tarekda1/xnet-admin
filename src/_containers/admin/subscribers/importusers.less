@@ -1,0 +1,25 @@
+@import "../../../variables.less";
+
+.uploadwrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .button {
+    display: flex;
+    flex-direction: column;
+
+    .uploadwrapper__icon {
+      padding: 10px;
+
+      &:before {
+        color: @secondary-color;
+      }
+    }
+
+    span {
+      margin-top: 15px;
+      display: block;
+    }
+  }
+}

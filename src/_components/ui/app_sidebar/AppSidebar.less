@@ -1,0 +1,137 @@
+@navbar-background-color: #fff;
+@sidebar-background-color: #fff;
+@sidebar-border: #1b30701c;
+@primary-color: #282262;
+@highlight-color: #1b306f47;
+
+
+.pushable {
+  flex-grow: 1;
+  display: flex;
+  overflow: visible !important;
+}
+
+.pushable>.pusher {
+  display: flex;
+  flex-grow: 1;
+  flex-direction: column;
+  margin-left: 0px;
+  transition: margin-left .5s ease;
+}
+
+.ui.visible.left.sidebar~.fixed,
+.ui.visible.left.sidebar~.pusher {
+  transform: translate3d(0, 0, 0) !important;
+  -webkit-transform: translate3d(0, 0, 0) !important;
+  margin-left: 260px !important;
+}
+
+.ui.collapsed.left.sidebar~.fixed,
+.ui.collapsed.left.sidebar~.pusher {
+  transform: translate3d(0, 0, 0) !important;
+  -webkit-transform: translate3d(0, 0, 0) !important;
+  margin-left: 80px !important;
+}
+
+.ui.left.sidebar {
+  width: 260px;
+  transition: all 0.5s ease;
+}
+
+.ui.collapsed.visible.left.sidebar {
+  width: 80px;
+}
+
+.sidebar__logo {
+  display: flex;
+  justify-content: center;
+}
+
+.logo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.sidebar-wrapper {
+  background-color: @sidebar-background-color  !important;
+  display: flex !important;
+  width: 100px !important;
+}
+
+/* Hover override*/
+.ui.inverted.menu .dropdown.item:hover,
+.ui.inverted.menu .link.item:hover,
+.ui.inverted.menu a.item:hover,
+.ui.link.inverted.menu .item:hover {
+
+  background-color: @highlight-color;
+
+}
+
+.ui.inverted.menu .dropdown.item:hover,
+.ui.inverted.menu .link.item:hover,
+.ui.inverted.menu a.item:hover,
+.ui.link.inverted.menu .item:hover {
+
+  color: @primary-color;
+
+}
+
+.sidebar-wrapper .sidebar-header {
+  display: flex;
+  color: @primary-color;
+  align-items: center;
+  padding: 1em 0;
+  flex-direction: column;
+  box-shadow: 0 -1px 0 #404854 inset;
+}
+
+
+.sidebar-wrapper.ui.sidebar.menu .item {
+  border-style: solid;
+  border-width: 0.1px;
+  border-color: @sidebar-border;
+  display: flex;
+  align-items: center;
+  height: 90px;
+  min-height: 90px;
+  font-weight: 400;
+  color: @primary-color;
+}
+
+.sidebar-wrapper.ui.inverted.menu .active.item::before {
+  content: '';
+  width: 5px;
+  height: 100%;
+  color: @primary-color;
+}
+
+.sidebar-wrapper.ui.sidebar.menu .item .icon {
+  margin-right: 1em;
+  color: @primary-color;
+}
+
+.portal {
+  display: flex;
+  height: 100%;
+  /* padding: 20px; */
+  /* background: linear-gradient( 135deg, var(--orange-main) 0%, var(--orange-light) 100%); */
+  background: white;
+}
+
+.pushable>.pusher {
+  background: white;
+}
+
+.icon.item {
+  a {
+    color: black;
+    font-size: 1.05rem;
+    padding-left: 5px;
+  }
+
+  a:hover {
+    color: @primary-color;
+  }
+}

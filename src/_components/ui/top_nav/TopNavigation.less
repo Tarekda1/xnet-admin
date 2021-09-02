@@ -1,0 +1,57 @@
+@import "../../../variables.less";
+
+.topNavigationContainer {
+  background: @top-nav;
+  display: flex;
+  justify-content: space-between;
+  height: 60px;
+  align-items: center;
+  padding: 0 30px;
+  width: 100%;
+  margin: 0px !important;
+  -webkit-box-shadow: 0 0 20px rgba(34, 36, 38, 0.15);
+  box-shadow: 0 0 20px rgba(34, 36, 38, 0.15);
+  z-index: 2;
+}
+
+@media only screen and (max-width: 767px) {
+  .topNavigationContainer {
+    height: 90px;
+  }
+}
+
+.squeez {
+  width: auto !important;
+  display: flex !important;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+@media only screen and (max-width: 767px) {
+  .squeez {
+    display: flex !important;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    flex: 1;
+    padding: 10px;
+  }
+}
+
+.logo {
+  display: flex !important;
+  align-items: center;
+  align-self: center;
+}
+
+.top-menu {
+  margin: 0rem 0 !important;
+}
+
+.agent__logo {
+  border-radius: 50%;
+  border: 1px solid lightgrey;
+  object-fit: contain;
+  height: 88px;
+}

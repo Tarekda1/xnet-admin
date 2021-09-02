@@ -1,0 +1,72 @@
+.profileTable {
+  border: none !important;
+}
+
+.profileTable > tr {
+  height: 75px;
+  border: none !important;
+}
+
+.profileTable > tr > td {
+  border: none !important;
+}
+
+.profileTable > tr > td > p {
+  font-size: 16px;
+}
+
+.profileTable__header {
+  font-size: 20px;
+}
+
+.profileTable__name {
+  text-transform: capitalize !important;
+}
+
+.profile__action {
+  background: green;
+  color: white;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.profile__action:hover {
+  background: darkgreen;
+  color: white;
+}
+
+.profile__avatar {
+  max-width: 150px;
+}
+.updateProfile {
+  border: none !important;
+}
+.updateProfile > tr > td > label {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.updateProfile__input {
+  border: 1px solid lightgray;
+  border-radius: 5px;
+  padding: 5px;
+}
+.updateProfile > tbody > tr > td {
+  border: none !important;
+}
+.updateProfile > tr > td:first-child {
+  min-width: 25%;
+}
+/* .updateProfile__action {
+  padding: 15px !important;
+  font-size: 16px !important;
+} */
+/* .updateProfile__action-submit {
+  background: green !important;
+  color: white !important;
+} */
+/* 
+.updateProfile__action-delete {
+  background: red !important;
+  color: white !important;
+} */
