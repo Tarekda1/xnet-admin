@@ -205,7 +205,7 @@ function index({ history }) {
           {loading ? (
             <Loading />
           ) : (
-            <Table celled striped>
+            <Table celled striped className="subsriber__table">
               <Table.Header>
                 <Table.Row>
                   {tableHeader.map((header, i) => (
