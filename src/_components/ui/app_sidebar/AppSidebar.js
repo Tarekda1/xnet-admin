@@ -9,6 +9,8 @@ function AppSidebar(props) {
   const language = "en";
   const history = useHistory();
   const user = useSelector((state) => state.user.userInfo);
+  const visible = useSelector((state) => state.global.showMenu);
+
   const token = sessionStorage.getItem("token");
 
   return token ? (
@@ -16,7 +18,9 @@ function AppSidebar(props) {
       <Sidebar
         as={Menu}
         vertical
-        className={user.role == "Admin" ? "visible" : ""}
+        width="thin"
+        direction={"left"}
+        visible={user.role == "Admin" && visible}
       >
         <Menu.Item>
           <Link to="/admin" className="sidebar__logo">

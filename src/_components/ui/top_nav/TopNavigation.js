@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   Dropdown,
   Menu,
@@ -7,6 +7,7 @@ import {
   Header,
   Segment,
   Image,
+  Icon,
 } from "semantic-ui-react";
 import "./TopNavigation.less";
 import { useSelector, useDispatch } from "react-redux";
@@ -27,6 +28,7 @@ const TopNavigation = ({ i18n }) => {
   //const token = localStorage.getItem('token');
   const user = useSelector((state) => state.user.userInfo);
   const token = useSelector((state) => state.user.token);
+  const visible = useSelector((state) => state.global.showMenu);
   const dispatch = useDispatch();
   const history = useHistory();
   const language = useSelector((state) => state.global.language);
@@ -80,6 +82,9 @@ const TopNavigation = ({ i18n }) => {
     i18n.changeLanguage(data.value);
     dispatch(globalActions.changeLanguage(data.value));
   }
+  const toggleMenu = useCallback(() => {
+    dispatch(globalActions.toggleMenu(false));
+  }, [visible]);
 
   return token ? (
     <Grid stackable className="topNavigationContainer">
@@ -92,20 +97,24 @@ const TopNavigation = ({ i18n }) => {
 					)}
 				</Link>
 			</Grid.Column> */}
+      <BorderLessSegment style={{ display: "flex" }} floated="left">
+        <Button
+          className="menu__icon"
+          style={{ width: "40px", height: "40px" }}
+          onClick={toggleMenu}
+        >
+          <Icon name="bars" style={{ margin: 0 }} size="large" />
+        </Button>
+      </BorderLessSegment>
       <Grid.Column className="squeez" floated="right">
-        <BorderLessSegment>
+        {/* <BorderLessSegment>
           <h4 style={{ margin: 0, paddingRight: "10px" }}>
             Welcome {user.username}
           </h4>
-        </BorderLessSegment>
+        </BorderLessSegment> */}
         <BorderLessSegment>
           <h4 style={{ margin: 0, paddingRight: "10px" }}>
-            loggedin: {moment(user.loginDate).format("hh:mm")}
-          </h4>
-        </BorderLessSegment>
-        <BorderLessSegment>
-          <h4 style={{ margin: 0, paddingRight: "10px" }}>
-            {moment(new Date()).format("YYYY-MM-DD")}
+            {moment(new Date()).format("dd-mm-yyyy")}
           </h4>
         </BorderLessSegment>
         <Menu floated="right" compact>

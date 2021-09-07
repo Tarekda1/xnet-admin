@@ -25,7 +25,7 @@ function App({ trans }) {
         <AppSidebar>
           <Alert />
           <TopNavigation i18n={trans} />
-          <Container fluid={true}>
+          <Container fluid={true} className="resp__container">
             <CustomSwitch>
               <PrivateRoute exact path="/dashboard" component={Dashboard} />
               <Route path="/account">
@@ -37,20 +37,6 @@ function App({ trans }) {
               <Redirect from="*" to="/dashboard" />
             </CustomSwitch>
           </Container>
-          <div
-            style={{
-              position: "absolute",
-              bottom: 0,
-              display: "flex",
-              background: "darkgray",
-              width: "100%",
-              padding: "5px 0",
-              flex: 1,
-              justifyContent: "center",
-            }}
-          >
-            حقوق النشر محفوظة Xnet {new Date().getFullYear()}
-          </div>
         </AppSidebar>
       </Router>
     </Provider>

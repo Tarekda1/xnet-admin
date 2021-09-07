@@ -30,6 +30,12 @@ const globalActions = {
       payload: data,
     };
   },
+  toggleMenu: (data) => {
+    return {
+      type: types.TOGGLE_MENU,
+      payload: data,
+    };
+  },
   loadSusbcribers: (data) => {
     console.log(data);
     return {

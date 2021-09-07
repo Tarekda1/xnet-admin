@@ -14,7 +14,7 @@ const userAccParser = (userAccsArray, useArray = false) => {
     if (useArray) {
       userAcc = [
         element[0],
-        element[3],
+        element[1],
         150000,
         false,
         "",

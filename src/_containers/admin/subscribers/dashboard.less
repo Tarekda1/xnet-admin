@@ -5,10 +5,60 @@
   align-items: center;
 }
 
+@media only screen and (max-width: 767px) {
+  .toolbar {
+    display: flex;
+    flex: 1;
+    flex-wrap: no-wrap;
+    flex-direction: column;
+    align-items: center;
+  }
+
+}
+
+@media only screen and (max-width: 767px) {
+  .action__buttons {
+    display: flex;
+    flex-direction: row;
+    flex: 1;
+    width: 100%;
+    justify-content: space-between;
+  }
+}
+
+@media only screen and (max-width: 767px) {
+  .search__input {
+    width: 100%;
+    margin: 10px 0;
+  }
+
+}
+
+@media only screen and (max-width: 767px) {
+  .item {
+    width: 100%;
+  }
+}
+
+
+@media only screen and (max-width: 767px) {
+  .search__container {
+    width: 100%;
+  }
+}
+
 .subsriber__table {
   overflow-x: hidden;
   overflow-y: scroll;
   height: 100%;
   max-height: calc(100vh - 250px);
   display: block;
+}
+
+.no__padding {
+  padding: 0 !important;
+}
+
+.no__margin {
+  margin: 0 !important;
 }

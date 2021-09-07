@@ -8,6 +8,7 @@ import React, {
 } from "react";
 import { throttle, debounce } from "lodash";
 import { getdashboardMenu, Role } from "@/_helpers";
+import { isMobile } from "react-device-detect";
 import {
   Grid,
   Segment,
@@ -66,18 +67,18 @@ const ToolBar = ({ onSearchSubmit }) => {
   }, []);
   return (
     <Fragment>
-      <List className="toolbar">
-        <List.Item>
-          <List.Content>
-            <Input
-              className="search__input"
-              icon="search"
-              placeholder="Search Client/Details"
-              onChange={debouncedChangeHandler}
-            />
-          </List.Content>
-        </List.Item>
-        <List.Item floated="right">
+      <ZeroPaddingSegment className="toolbar">
+        <ZeroPaddingSegment
+          className={`${"search__container"} ${"no__margin"}`}
+        >
+          <Input
+            className="search__input"
+            icon="search"
+            placeholder="Search Client/Details"
+            onChange={debouncedChangeHandler}
+          />
+        </ZeroPaddingSegment>
+        <ZeroPaddingSegment className={`${"action__buttons"} ${"no__margin"}`}>
           <Button className="btn basicStyle" icon>
             <Icon name="plus" />
             Add Subscriber
@@ -90,8 +91,8 @@ const ToolBar = ({ onSearchSubmit }) => {
             <Icon name="file excel" />
             Import Subscribers
           </Button>
-        </List.Item>
-      </List>
+        </ZeroPaddingSegment>
+      </ZeroPaddingSegment>
       <div style={{ clear: "both" }} />
     </Fragment>
   );
@@ -154,7 +155,9 @@ function index({ history }) {
     };
     return (
       <Table.Row key={subscriber.subscriberId}>
-        <Table.Cell>{subscriber.subscribername}</Table.Cell>
+        <Table.Cell>
+          <strong>{subscriber.subscribername}</strong>
+        </Table.Cell>
         <Table.Cell>{subscriber.username}</Table.Cell>
         <Table.Cell>{subscriber.collectorname}</Table.Cell>
         <Table.Cell>
@@ -171,6 +174,7 @@ function index({ history }) {
         <Table.Cell>{subscriber.subscribtionfees}</Table.Cell>
         <Table.Cell>{subscriber.billDate}</Table.Cell>
         <Table.Cell>{subscriber.paymentDate}</Table.Cell>
+        <Table.Cell>{""}</Table.Cell>
         {/* <Table.Cell>
 					<Link to={`/customer/step2?customerid=${subscriber.id}`}>{subscriber.Notes}</Link>
 				</Table.Cell> */}
@@ -205,23 +209,34 @@ function index({ history }) {
           {loading ? (
             <Loading />
           ) : (
-            <Table celled striped className="subsriber__table">
-              <Table.Header>
-                <Table.Row>
-                  {tableHeader.map((header, i) => (
-                    <Table.HeaderCell key={i}>{header}</Table.HeaderCell>
+            <ZeroPaddingSegment>
+              <Table celled striped className="subsriber__table">
+                <Table.Header>
+                  <Table.Row>
+                    {tableHeader.map((header, i) => (
+                      <Table.HeaderCell
+                        style={{ width: i == 7 ? "25%" : "12%" }}
+                        key={i}
+                      >
+                        {header}
+                      </Table.HeaderCell>
+                    ))}
+                  </Table.Row>
+                </Table.Header>
+                <Table.Body>
+                  {subscribers.map((subscriber, index) => (
+                    <CustomerRow
+                      key={subscriber.subscriberId}
+                      subscriber={subscriber}
+                    />
                   ))}
-                </Table.Row>
-              </Table.Header>
-              <Table.Body>
-                {subscribers.map((subscriber, index) => (
-                  <CustomerRow
-                    key={subscriber.subscriberId}
-                    subscriber={subscriber}
-                  />
-                ))}
-              </Table.Body>
-            </Table>
+                </Table.Body>
+              </Table>
+              <ZeroPaddingSegment>
+                <strong>Total: </strong>
+                {subscribers.length}
+              </ZeroPaddingSegment>
+            </ZeroPaddingSegment>
           )}
         </FlexColumn>
       </ZeroPaddingSegment>
@@ -229,19 +244,21 @@ function index({ history }) {
   };
 
   return (
-    <Container fluid style={{ height: "100%" }}>
-      <Segment className="no__border">
-        <Header className="subtitle" as="h2">
-          Admin Dashboard
-        </Header>
-      </Segment>
-      <BorderLessSegment>
+    <BorderLessSegment className="no__padding" style={{ height: "100%" }}>
+      {!isMobile && (
+        <Segment className={`${"no__border"}`}>
+          <Header className="subtitle" as="h2">
+            Admin Dashboard
+          </Header>
+        </Segment>
+      )}
+      <BorderLessSegment className={`${"no__padding"}`}>
         <Fragment>
           <ToolBar onSearchSubmit={onSearchSubmit} />
           <Subscribers />
         </Fragment>
       </BorderLessSegment>
-    </Container>
+    </BorderLessSegment>
   );
 }
 
