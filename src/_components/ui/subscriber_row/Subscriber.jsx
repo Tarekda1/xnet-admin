@@ -11,30 +11,33 @@ import {
   Icon,
   Checkbox,
 } from "semantic-ui-react";
-import { useSelector } from "react-redux";
+import { globalActions } from "@/_actions/globalActions";
+import { useDispatch, useSelector } from "react-redux";
 import { customerService } from "@/_services";
 
-const Subscriber = ({ subscriber, setloading }) => {
+const Subscriber = ({ subscriber }) => {
   const userInfo = useSelector((state) => state.user.userInfo);
+  const dispatch = useDispatch();
   const postPaid = async (subscriberId) => {
-    setloading(true);
+    dispatch(globalActions.shouldLoad(true));
     const resp = await customerService.postPaid(subscriberId, {
       username: userInfo.username,
     });
     console.log(resp);
     if (resp && resp.code == 200) {
-      setSubscribers((prevSubs) => {
-        let selected = prevSubs.find(
-          (subs) => subs.subscriberId == subscriberId
-        );
-        selected.subscribtionpaid = true;
-        return [...prevSubs];
-      });
+      dispatch(globalActions.updateSubscriber(subscriberId));
+      // setSubscribers((prevSubs) => {
+      //   let selected = prevSubs.find(
+      //     (subs) => subs.subscriberId == subscriberId
+      //   );
+      //   selected.subscribtionpaid = true;
+      //   return [...prevSubs];
+      // });
     }
-    setloading(false);
+    //dispatch(globalActions.shouldLoad(false));
   };
   return (
-    <Table.Row fluid key={subscriber.subscriberId}>
+    <Table.Row fluid="true" key={subscriber.subscriberId}>
       <Table.Cell>
         <strong>{subscriber.subscribername}</strong>
       </Table.Cell>

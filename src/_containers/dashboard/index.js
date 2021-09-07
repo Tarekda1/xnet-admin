@@ -167,9 +167,7 @@ function Dashboard({ history }) {
     <Container fluid style={{ height: "100%" }}>
       <Segment className="no__border">
         <Header className="subtitle" as="h2">
-          {userInfo && userInfo.role == "ADMIN"
-            ? "Admin Dashboard"
-            : "لائحة الزبائن"}
+          لائحة الزبائن
         </Header>
       </Segment>
       <BorderLessSegment>

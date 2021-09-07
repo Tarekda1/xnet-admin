@@ -92,8 +92,8 @@ function authHeader(url) {
 function handleResponse(response) {
   return response.text().then((text) => {
     const data = text && JSON.parse(text);
-    console.log("resp", data);
-    console.log("ok", response.ok);
+    // console.log("resp", data);
+    // console.log("ok", response.ok);
     if (data.error == "Unauthorized") {
       accountService.logout(() => history.push("./login"));
     } else if (!response.ok) {

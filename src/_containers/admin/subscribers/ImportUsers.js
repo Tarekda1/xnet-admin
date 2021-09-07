@@ -81,9 +81,9 @@ const ImportUsers = ({ history }) => {
   };
 
   const handleUpload = async (e) => {
-    console.log(e.target.files[0]);
+    //console.log(e.target.files[0]);
     const { data } = await excelHelper.parseExcelFile(e.target.files[0]);
-    console.log(data);
+    //console.log(data);
     setUploadedUsers(data);
   };
 
@@ -106,7 +106,7 @@ const ImportUsers = ({ history }) => {
       setIsSaving(true);
       console.log(typeof uploadedUsers);
       const jsonObj = userAccParser(uploadedUsers);
-      console.log(jsonObj);
+      //console.log(jsonObj);
       const resp = await customerService.createBatch(jsonObj);
       if (resp && resp.code === 200) {
         console.log(resp.code);

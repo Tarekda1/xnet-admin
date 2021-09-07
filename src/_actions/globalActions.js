@@ -43,6 +43,23 @@ const globalActions = {
       payload: data,
     };
   },
+  updateSubscriber: (subscriberId) => {
+    // setSubscribers((prevSubs) => {
+    //   let selected = prevSubs.find((subs) => subs.subscriberId == subscriberId);
+    //   selected.subscribtionpaid = true;
+    //   return [...prevSubs];
+    // });
+    return async (dispatch, getState) => {
+      //setSubscribers((prevSubs) => {
+      const subscribers = getState().global.subscribers;
+      let selected = subscribers.find(
+        (subs) => subs.subscriberId == subscriberId
+      );
+      selected.subscribtionpaid = true;
+      dispatch(globalActions.shouldLoad(false));
+      //});
+    };
+  },
   fetchSubscribers: (params) => {
     return async (dispatch, getState) => {
       try {
