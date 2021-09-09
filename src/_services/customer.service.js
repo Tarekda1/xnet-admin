@@ -7,6 +7,7 @@ export const customerService = {
   update,
   search,
   postPaid,
+  postUnPaid,
   createBatch,
 };
 
@@ -50,6 +51,10 @@ function search(query, offset = 0) {
 
 function postPaid(subscriberId, body, useJson = true) {
   return fetchWrapper.put(`${baseUrl}/paid/${subscriberId}`, body, useJson);
+}
+
+function postUnPaid(subscriberId, body, useJson = true) {
+  return fetchWrapper.put(`${baseUrl}/unpaid/${subscriberId}`, body, useJson);
 }
 
 function createBatch(users, useJson = true) {

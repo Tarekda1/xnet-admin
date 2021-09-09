@@ -26,6 +26,7 @@ import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { customerService } from "@/_services";
 import { Loading } from "@/_components";
+import { AddEdit } from "./AddEdit";
 import "./dashboard.less";
 
 const BorderLessSegment = styled(Segment)`
@@ -46,6 +47,8 @@ const FlexColumn = styled(ZeroPaddingSegment)`
 const ToolBar = ({ onSearchSubmit }) => {
   const [text, settext] = useState("");
   const history = useHistory();
+  const [selectedSubscriber, setselectedSubscriber] = useState(-1);
+  const [showModal, setshowModal] = useState(false);
   const changeHandler = (e, data) => {
     console.log(data.value);
     settext(data.value);
@@ -79,7 +82,14 @@ const ToolBar = ({ onSearchSubmit }) => {
           />
         </ZeroPaddingSegment>
         <ZeroPaddingSegment className={`${"action__buttons"} ${"no__margin"}`}>
-          <Button className="btn basicStyle" icon>
+          <Button
+            className="btn basicStyle"
+            icon
+            onClick={(e) => {
+              setselectedSubscriber((prev) => -1);
+              setshowModal(true);
+            }}
+          >
             <Icon name="plus" />
             Add Subscriber
           </Button>
@@ -91,6 +101,23 @@ const ToolBar = ({ onSearchSubmit }) => {
             <Icon name="file excel" />
             Import Subscribers
           </Button>
+          <AddEdit
+            Id={selectedSubscriber}
+            onSave={() => {
+              setshowModal(false);
+              if (selectedSubscriber === -1) {
+                fetchUser();
+              } else {
+                //update user data
+                fetchUserById(selectedSubscriber);
+              }
+            }}
+            open={showModal}
+            onClose={() => {
+              setselectedSubscriber(-1);
+              setshowModal(false);
+            }}
+          />
         </ZeroPaddingSegment>
       </ZeroPaddingSegment>
       <div style={{ clear: "both" }} />
@@ -153,6 +180,27 @@ function index({ history }) {
       }
       setloading(false);
     };
+
+    const postUnPaid = useCallback(async (subscriberId) => {
+      setloading(true);
+      const resp = await customerService.postUnPaid(subscriberId, {
+        username: userInfo.username,
+      });
+      console.log(resp);
+      if (resp && resp.code == 200) {
+        setSubscribers((prevSubs) => {
+          let selected = prevSubs.find(
+            (subs) => subs.subscriberId == subscriberId
+          );
+          selected.subscribtionpaid = false;
+          return [...prevSubs];
+        });
+      }
+      setloading(false);
+    }, []);
+    //  async (subscriberId) => {
+
+    // };
     return (
       <Table.Row key={subscriber.subscriberId}>
         <Table.Cell>
@@ -165,9 +213,10 @@ function index({ history }) {
             onChange={(e, data) => {
               if (data.checked) {
                 postPaid(subscriber.subscriberId);
+              } else {
+                postUnPaid(subscriber.subscriberId);
               }
             }}
-            disabled={subscriber.subscribtionpaid}
             checked={subscriber.subscribtionpaid}
           />
         </Table.Cell>
@@ -203,6 +252,14 @@ function index({ history }) {
   };
 
   const Subscribers = () => {
+    const nbofPaid = () => {
+      return subscribers.reduce((acc, subs) => {
+        if (subs.subscribtionpaid === true) {
+          return acc + 1;
+        }
+        return acc;
+      }, 0);
+    };
     return (
       <ZeroPaddingSegment>
         <FlexColumn>
@@ -210,6 +267,12 @@ function index({ history }) {
             <Loading />
           ) : (
             <ZeroPaddingSegment>
+              <ZeroPaddingSegment>
+                <strong>Total: </strong>
+                {subscribers.length}
+                <strong> Total Paid: </strong>
+                {nbofPaid()}
+              </ZeroPaddingSegment>
               <Table celled striped className="subsriber__table">
                 <Table.Header>
                   <Table.Row>
@@ -232,10 +295,6 @@ function index({ history }) {
                   ))}
                 </Table.Body>
               </Table>
-              <ZeroPaddingSegment>
-                <strong>Total: </strong>
-                {subscribers.length}
-              </ZeroPaddingSegment>
             </ZeroPaddingSegment>
           )}
         </FlexColumn>
