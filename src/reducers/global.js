@@ -1,5 +1,4 @@
 import types from "@/_actions/types.js";
-import { isMobile } from "react-device-detect";
 
 const initialState = {
   language: "en",
@@ -24,6 +23,8 @@ export default (state = initialState, action) => {
       return { ...state, language: payload };
     case types.LOAD_SUBSCRIBERS:
       return { ...state, subscribers: payload };
+    case types.ADD_SUBSCRIBER:
+      return { ...state, subscribers: [...state.subscribers, payload] };
     case types.TOGGLE_MENU:
       return { ...state, showMenu: !state.showMenu };
     default:

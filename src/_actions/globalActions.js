@@ -3,7 +3,7 @@ import { ispService } from "@/_services";
 import userActions from "@/_actions/userActions";
 import { showNotification } from "@/_helpers";
 import Pagged from "@/_helpers/pagged-class";
-import { customerService } from "../_services/customer.service";
+import { customerService, alertService } from "@/_services";
 
 const globalActions = {
   changeLanguage: (data) => {
@@ -44,11 +44,6 @@ const globalActions = {
     };
   },
   updateSubscriber: (subscriberId) => {
-    // setSubscribers((prevSubs) => {
-    //   let selected = prevSubs.find((subs) => subs.subscriberId == subscriberId);
-    //   selected.subscribtionpaid = true;
-    //   return [...prevSubs];
-    // });
     return async (dispatch, getState) => {
       //setSubscribers((prevSubs) => {
       const subscribers = getState().global.subscribers;
@@ -76,73 +71,30 @@ const globalActions = {
       }
     };
   },
-  // fetchInternetUserAccounts: (params) => {
-  // 	return async (dispatch, getState) => {
-  // 		try {
-  // 			dispatch(globalActions.shouldLoad(true));
-  // 			const data = await ispService.getAllUserAccounts(params);
-  // 			console.log(data);
-  // 			dispatch(globalActions.loadInternetUserAccounts(data));
-  // 		} catch (error) {
-  // 			//or popup notification
-  // 			console.log(error);
-  // 		} finally {
-  // 			dispatch(globalActions.shouldLoad(false));
-  // 		}
-  // 	};
-  // },
-  // updateUserAcc: (id, userAcc) => {
-  // 	return async (dispatch, getState) => {
-  // 		console.log(id);
-  // 		const data = await ispService.updateUserAcc(id, userAcc);
-  // 		console.log(data);
-  // 		dispatch(globalActions.fetchInternetUserAccounts());
-  // 	};
-  // },
-  // deleteUserAcc: (id, userAcc) => {
-  // 	return async (dispatch, getState) => {
-  // 		console.log(id);
-  // 		const data = await ispService.deleteUserAcc(id);
-  // 		console.log(data);
-  // 		dispatch(globalActions.fetchInternetUserAccounts());
-  // 	};
-  // },
-  // searchForUserAcc: (term) => {
-  // 	console.log(`searching: ${term}`);
-  // 	return async (dispatch, getState) => {
-  // 		try {
-  // 			console.log(term);
-  // 			dispatch(globalActions.showSearch(true));
-  // 			const data = await ispService.searchUserAccount(term);
-  // 			// const data = getState().isp.userAccounts.items.filter((userAcc) => {
-  // 			//   console.log(userAcc);
-  // 			//   return (
-  // 			//     userAcc.firstName.toLowerCase().indexOf(term) !== -1 ||
-  // 			//     userAcc.lastName.toLowerCase().indexOf(term) !== -1
-  // 			//   );
-  // 			// });
-  // 			// const mockPaggedData = new Pagged(data, 0, 1, data.length);
-  // 			console.log(`datareturned: ${JSON.stringify(data)}`);
-  // 			return dispatch(globalActions.loadInternetUserAccounts(data));
-  // 		} catch (error) {
-  // 			console.log(err);
-  // 			//need to use a logger
-  // 		} finally {
-  // 			dispatch(globalActions.showSearch(false));
-  // 		}
-  // 	};
-  // },
-  // generateMonthlyBill: (date) => {
-  // 	return async (dispatch, getState) => {
-  // 		console.log(date);
-  // 		const data = await ispService.generateMonthlyBill(date);
-  // 		if (data && data.hasOwnProperty('message')) {
-  // 			showNotification({ title: '', message: data.message });
-  // 		}
-  // 		//console.log(data);
-  // 		dispatch(globalActions.fetchInternetUserAccounts());
-  // 	};
-  // }
+  addSusbcriber: (param) => {
+    return async (dispatch, getState) => {
+      try {
+        console.log(param);
+        dispatch(globalActions.shouldLoad(true));
+        const newSubscriber = await customerService.create(param);
+        alertService.success("Subscriber added successfully", {
+          keepAfterRouteChange: true,
+        });
+        console.log(newSubscriber);
+        dispatch({
+          type: types.ADD_SUBSCRIBER,
+          payload: newSubscriber,
+        });
+        dispatch(globalActions.shouldLoad(false));
+      } catch (err) {
+        console.log(err);
+        alertService.error(err);
+        if (err === 403) {
+          dispatch(userActions.logout());
+        }
+      }
+    };
+  },
 };
 
 export { globalActions };

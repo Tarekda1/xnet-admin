@@ -32,23 +32,28 @@ function List({ match }) {
   const isVisibleRef = useRef(true);
   const [selectedUserId, setselectedUserId] = useState(-1);
   const [showModal, setshowModal] = useState(false);
-  //const [openDelete, setOpenDelete] = useState(false);
   const [selectedIdForDelete, setSelectedIdForDelete] = useState(-1);
 
   return (
-    <Segment>
-      <h1>Portal Users</h1>
-      <p>All users from secure (admin only) api end point:</p>
-      <Button
-        icon
-        className="btn basicStyle"
-        onClick={(e) => {
-          setselectedUserId((prev) => -1);
-          setshowModal(true);
-        }}
-      >
-        <Icon name="plus" /> Add User
-      </Button>
+    <Segment basic style={{ padding: "0" }}>
+      <div>
+        <Segment style={{ paddingLeft: "0" }} basic floated="left">
+          <h1>Portal Users</h1>
+          <p>Secured only accessible by admin</p>
+        </Segment>
+        <Segment padded={false} basic floated="right">
+          <Button
+            icon
+            className="btn basicStyle"
+            onClick={(e) => {
+              setselectedUserId((prev) => -1);
+              setshowModal(true);
+            }}
+          >
+            <Icon name="plus" /> Add User
+          </Button>
+        </Segment>
+      </div>
       {loading ? (
         <Loading />
       ) : (

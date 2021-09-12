@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import _, { get } from "lodash";
+import { useSelector, useDispatch } from "react-redux";
 import * as Yup from "yup";
 import {
   Modal,
@@ -13,35 +14,28 @@ import {
   Icon,
   Message,
   Header,
+  Checkbox,
 } from "semantic-ui-react";
-import { accountService, alertService } from "@/_services";
+import { customerService, alertService } from "@/_services";
 import { Loading } from "@/_components/";
 import "./add-edit.less";
+import { globalActions } from "../../../_actions/globalActions";
 
 function AddEdit({ history, match, open, Id, onSave, onClose }) {
-  //const [ isAddMode, setIsAddMode ] = useState(true);
   const isVisible = useRef(false);
-  //const [ id, setId ] = useState(-1);
   const [loading, setLoading] = useState(false);
-  const initialState = {
-    firstName: "",
-    lastName: "",
-    email: "",
-    role: "",
-    password: "",
-    confirmPassword: "",
-  };
-  const [user, setUser] = useState(initialState);
-  //const [errors, setErrors] = useState({});
-  //const [isSubmitting, setIsSubmitting] = useState(false);
+  const [subscriber, setSubscriber] = useState(initialState);
+  const dispatch = useDispatch();
 
-  const initialValues = {
-    name: "",
+  const initialState = {
+    subscribername: "",
+    subscribtionfees: 150000,
     username: "",
-    email: "",
-    role: "",
-    password: "",
-    confirmPassword: "",
+    collectorname: "",
+    susbcriberId: "",
+    billDate: "",
+    paymentDate: "",
+    subscribtionpaid: false,
   };
 
   const isAddMode = (id) => id === -1;
@@ -49,52 +43,49 @@ function AddEdit({ history, match, open, Id, onSave, onClose }) {
   useEffect(() => {
     //setId(Id);
     if (Id === -1) {
-      setUser(initialValues);
+      setSubscriber(initialState);
     }
     return () => {};
   }, [open]);
 
   const validationSchema = Yup.object().shape({
-    name: Yup.string().required("First Name is required"),
-    username: Yup.string().required("First Name is required"),
-    email: Yup.string().email("Email is invalid").required("Email is required"),
-    role: Yup.string().required("Role is required"),
-    password: Yup.string()
-      .concat(Id === -1 ? Yup.string().required("Password is required") : null)
-      .min(6, "Password must be at least 6 characters"),
-    confirmPassword: Yup.string()
-      .when("password", (password, schema) => {
-        if (password) return schema.required("Confirm Password is required");
-      })
-      .oneOf([Yup.ref("password")], "Passwords must match"),
+    subscribername: Yup.string().required("susbcribername is required"),
+    username: Yup.string().required("username is required"),
+    subscribtionfees: Yup.number().required("fees is required"),
+    billDate: Yup.date().default(new Date()),
+    paymentDate: Yup.date().default(new Date()),
+    subscribtionpaid: Yup.boolean().required().oneOf([true, false]),
   });
 
   function onSubmit(fields, { setStatus, setSubmitting }) {
     setStatus();
     if (Id === -1) {
-      createUser(fields, setSubmitting);
+      createSusbcriber(fields, setSubmitting);
     } else {
-      updateUser(Id, fields, setSubmitting);
+      updateSubscriber(Id, fields, setSubmitting);
     }
   }
 
-  function createUser(fields, setSubmitting) {
-    accountService
-      .create(fields)
-      .then(() => {
-        alertService.success("User added successfully", {
-          keepAfterRouteChange: true,
-        });
-        onSave();
-      })
-      .catch((error) => {
-        setSubmitting(false);
-        alertService.error(error);
-      });
+  function createSusbcriber(fields, setSubmitting) {
+    // customerService
+    //   .create(fields)
+    //   .then(() => {
+    //     alertService.success("Subscriber added successfully", {
+    //       keepAfterRouteChange: true,
+    //     });
+    //     onSave();
+    //   })
+    //   .catch((error) => {
+    //     setSubmitting(false);
+    //     alertService.error(error);
+    //   });
+    console.log("dispatched");
+    dispatch(globalActions.addSusbcriber(fields));
+    onSave();
   }
 
-  function updateUser(id, fields, setSubmitting) {
-    accountService
+  function updateSubscriber(id, fields, setSubmitting) {
+    customerService
       .update(id, fields)
       .then(() => {
         onSave();
@@ -105,20 +96,13 @@ function AddEdit({ history, match, open, Id, onSave, onClose }) {
       });
   }
 
-  const roles = ["Admin", "Collector"];
-  const rolesOptions = _.map(roles, (value, index) => ({
-    key: roles[index],
-    text: value,
-    value: roles[index],
-  }));
-
   return (
     <Modal open={open}>
       <Header as="h2">
         {isAddMode(Id) ? "Add Subscriber" : "Edit Subscriber"}
       </Header>
       <Formik
-        initialValues={initialValues}
+        initialValues={initialState}
         validationSchema={validationSchema}
         onSubmit={onSubmit}
       >
@@ -130,11 +114,22 @@ function AddEdit({ history, match, open, Id, onSave, onClose }) {
               async function fetchUser() {
                 try {
                   setLoading(true);
-                  const { user } = await accountService.getById(Id).then();
-                  setUser(user);
-                  const fields = ["name", "username", "email", "role"];
+                  const { user: subscriber } = await customerService.getById(
+                    Id
+                  );
+                  setSubscriber(subscriber);
+                  const fields = [
+                    "susbcribername",
+                    "username",
+                    "subscribtionfees",
+                    "subscribtionpaid",
+                    "billDate",
+                    "subscriberId",
+                    "paymentDate",
+                    "collectorname",
+                  ];
                   fields.forEach((field) => {
-                    setFieldValue(field, user[field], false);
+                    setFieldValue(field, subscriber[field], false);
                   });
                   setLoading(false);
                 } catch (error) {
@@ -149,28 +144,31 @@ function AddEdit({ history, match, open, Id, onSave, onClose }) {
             };
             //}
           }, [open]);
-
+          {
+            console.log(errors);
+          }
           return (
             <Form style={{ padding: "15px" }}>
               <Grid>
                 <Grid.Row>
                   <Grid.Column width={8}>
                     <div className="form-group__col">
-                      <label>Name</label>
+                      <label>Subscriber Name</label>
                       <Input
-                        name="Name"
-                        placeholder="Name"
-                        value={user.name}
+                        name="subscribername"
+                        placeholder="Subscriber Name"
+                        value={subscriber.subscribername}
                         onChange={(e, data) => {
                           console.log(data);
-                          setFieldValue("name", data.value);
-                          setUser({
-                            ...user,
-                            name: data.value,
+                          setFieldValue("subscribername", data.value);
+                          setSubscriber({
+                            ...subscriber,
+                            subscribername: data.value,
                           });
                         }}
                         className={
-                          "form-control" + (errors.name ? " is-invalid" : "")
+                          "form-control" +
+                          (errors.subscribername ? " is-invalid" : "")
                         }
                       />
                       <ErrorMessage
@@ -182,12 +180,12 @@ function AddEdit({ history, match, open, Id, onSave, onClose }) {
                       <label>Username</label>
                       <Input
                         placeholder="Username"
-                        value={user.username}
+                        value={subscriber.username}
                         onChange={(e, data) => {
                           console.log(data);
                           setFieldValue("username", data.value);
-                          setUser({
-                            ...user,
+                          setSubscriber({
+                            ...subscriber,
                             username: data.value,
                           });
                         }}
@@ -202,99 +200,120 @@ function AddEdit({ history, match, open, Id, onSave, onClose }) {
                       />
                     </div>
                     <div className="form-group__col">
-                      <label>email</label>
+                      <label>Subscribtion Fees</label>
                       <Input
-                        placeholder="email"
-                        value={user.email}
+                        placeholder="subscribtionfees"
+                        value={subscriber.subscribtionfees}
                         onChange={(e, data) => {
                           console.log(data);
-                          setFieldValue("email", data.value);
-                          setUser({
-                            ...user,
-                            email: data.value,
+                          setFieldValue("subscribtionfees", data.value);
+                          setSubscriber({
+                            ...subscriber,
+                            subscribtionfees: data.value,
                           });
                         }}
                         className={
-                          "form-control" + (errors.email ? " is-invalid" : "")
+                          "form-control" +
+                          (errors.subscribtionfees ? " is-invalid" : "")
                         }
                       />
-                      <ErrorMessage name="email" className="invalid-feedback" />
+                      <ErrorMessage
+                        name="subscribtionfees"
+                        className="invalid-feedback"
+                      />
                     </div>
                     <div className="form-group__col">
-                      <label>Role</label>
-                      <Dropdown
-                        placeholder="Role"
-                        className="ui selection fluid dropdown"
-                        value={user.role}
-                        options={rolesOptions}
+                      <label>Payment Date</label>
+                      <Input
+                        placeholder="Payment Date"
+                        value={subscriber.paymentDate}
                         onChange={(e, data) => {
                           console.log(data);
-                          setFieldValue("role", data.value);
-                          setUser({
-                            ...user,
-                            role: data.value,
+                          setFieldValue("paymentDate", new Date(data.value));
+                          setSubscriber({
+                            ...subscriber,
+                            paymentDate: data.value,
                           });
                         }}
+                        className={
+                          "form-control" +
+                          (errors.paymentDate ? " is-invalid" : "")
+                        }
                       />
-                      <ErrorMessage name="role" className="invalid-feedback" />
+                      <ErrorMessage
+                        name="paymentDate"
+                        className="invalid-feedback"
+                      />
                     </div>
                   </Grid.Column>
                   <Grid.Column width={8}>
-                    <div className="form-row" />
-                    {!Id === -1 && (
-                      <div>
-                        <p>Leave blank to keep the same password</p>
-                      </div>
-                    )}
-                    <div className="form-row">
-                      <div className="form-group__col">
-                        <label>Password</label>
-                        <Input
-                          type="password"
-                          onChange={(e, data) => {
-                            console.log(data);
-                            setFieldValue("password", data.value);
-                            setUser({
-                              ...user,
-                              password: data.value,
-                            });
-                          }}
-                          className={
-                            "form-control" +
-                            (errors.password && touched.password
-                              ? " is-invalid"
-                              : "")
-                          }
-                        />
-                        <ErrorMessage
-                          name="password"
-                          className="invalid-feedback"
-                        />
-                      </div>
-                      <div className="form-group__col">
-                        <label>Confirm Password</label>
-                        <Input
-                          type="password"
-                          onChange={(e, data) => {
-                            console.log(data);
-                            setFieldValue("confirmPassword", data.value);
-                            setUser({
-                              ...user,
-                              confirmPassword: data.value,
-                            });
-                          }}
-                          className={
-                            "form-control" +
-                            (errors.confirmPassword && touched.confirmPassword
-                              ? " is-invalid"
-                              : "")
-                          }
-                        />
-                        <ErrorMessage
-                          name="confirmPassword"
-                          className="invalid-feedback"
-                        />
-                      </div>
+                    <div className="form-group__col">
+                      <label>Bill Due Date</label>
+                      <Input
+                        placeholder="Bill Due Date"
+                        value={subscriber.billDate}
+                        onChange={(e, data) => {
+                          console.log(data);
+                          setFieldValue("billDate", new Date(data.value));
+                          setSubscriber({
+                            ...subscriber,
+                            billDate: data.value,
+                          });
+                        }}
+                        className={
+                          "form-control" +
+                          (errors.billDate ? " is-invalid" : "")
+                        }
+                      />
+                      <ErrorMessage
+                        name="billDate"
+                        className="invalid-feedback"
+                      />
+                    </div>
+                    <div className="form-group__col">
+                      <label>Susbcribtion Paid</label>
+                      <Checkbox
+                        checked={subscriber.subscribtionpaid}
+                        onChange={(e, data) => {
+                          console.log(data);
+                          setFieldValue("subscribtionpaid", data.checked);
+                          setSubscriber({
+                            ...subscriber,
+                            subscribtionpaid: data.checked,
+                          });
+                        }}
+                        className={
+                          "form-control" +
+                          (errors.subscribtionpaid ? " is-invalid" : "")
+                        }
+                      />
+                      <ErrorMessage
+                        name="subscribtionpaid"
+                        className="invalid-feedback"
+                      />
+                    </div>
+                    <div className="form-group__col">
+                      <label>Collector Name</label>
+                      <Input
+                        placeholder="Collector Name"
+                        value={subscriber.collectorname}
+                        onChange={(e, data) => {
+                          console.log(data);
+                          setFieldValue("collectorname", data.value);
+                          setSubscriber({
+                            ...subscriber,
+                            collectorname: data.value,
+                          });
+                        }}
+                        className={
+                          "form-control" +
+                          (errors.collectorname ? " is-invalid" : "")
+                        }
+                      />
+                      <ErrorMessage
+                        name="collectorname"
+                        className="invalid-feedback"
+                      />
                     </div>
                   </Grid.Column>
                 </Grid.Row>
@@ -321,7 +340,7 @@ function AddEdit({ history, match, open, Id, onSave, onClose }) {
                 <Button
                   onClick={(e) => {
                     e.preventDefault();
-                    setUser(initialValues);
+                    setSubscriber(initialState);
                     onClose();
                   }}
                   className="btn basicStyle"
