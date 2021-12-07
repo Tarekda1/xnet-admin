@@ -72,7 +72,7 @@ const ToolBar = ({ onSearchSubmit }) => {
 
 function Dashboard({ history }) {
   const userInfo = useSelector((state) => state.user.userInfo);
-  const subscribers = useSelector((state) => state.global.subscribers);
+  const subscribers = useSelector((state) => state.global.filteredSubscribers);
   const loading = useSelector((state) => state.global.showLoading);
   const dispatch = useDispatch();
   const tableHeader = [
@@ -111,25 +111,28 @@ function Dashboard({ history }) {
     };
   }, [userInfo]);
 
-  const onSearchSubmit = async (text) => {
+  const onSearchSubmit = (text) => {
     //setloading(true);
     //console.log('agent id', userInfo);
-    let remoteCustomers;
+    //let remoteCustomers;
 
     try {
-      dispatch(globalActions.shouldLoad(true));
-      if (text) {
-        remoteCustomers = await customerService.search(`username=${text}`);
-      } else {
-        remoteCustomers = await customerService.getAllCustomers();
-      }
+      // dispatch(globalActions.shouldLoad(true));
+      // if (text) {
+      //   remoteCustomers = await customerService.search(`username=${text}`);
+      // } else {
+      //   remoteCustomers = await customerService.getAllCustomers();
+      // }
 
-      console.log("from fetch", remoteCustomers);
-      dispatch(globalActions.loadSusbcribers(remoteCustomers || []));
+      // console.log("from fetch", remoteCustomers);
+      // dispatch(globalActions.loadSusbcribers(remoteCustomers || []));
+      //let input = e.target.value;
+      console.log("dispatch")
+      dispatch(globalActions.filterSusbcribers({ value: text }))
     } catch (error) {
       console.log(error);
     } finally {
-      dispatch(globalActions.shouldLoad(false));
+      //dispatch(globalActions.shouldLoad(false));
     }
   };
 

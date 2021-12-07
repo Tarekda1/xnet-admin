@@ -46,12 +46,16 @@ const globalActions = {
   updateSubscriber: (subscriberId) => {
     return async (dispatch, getState) => {
       //setSubscribers((prevSubs) => {
-      const subscribers = getState().global.subscribers;
+      const subscribers = getState().global.subscribers.slice(0);
       let selected = subscribers.find(
         (subs) => subs.subscriberId == subscriberId
       );
       selected.subscribtionpaid = true;
-      dispatch(globalActions.shouldLoad(false));
+      dispatch({
+        type: types.UPDATE_SUBSCRIBER,
+        payload: selected
+      })
+      //dispatch(globalActions.shouldLoad(false));
       //});
     };
   },
@@ -70,6 +74,20 @@ const globalActions = {
         }
       }
     };
+  },
+  filterSusbcribers: (filter) => {
+    console.log("filter")
+    return {
+      type: types.FILTER_SUBSCRIBERS,
+      payload: filter
+    }
+  },
+  filterPaidStatus: (status) => {
+    console.log("filter")
+    return {
+      type: types.FILTER_PAID,
+      payload: status
+    }
   },
   addSusbcriber: (param) => {
     return async (dispatch, getState) => {

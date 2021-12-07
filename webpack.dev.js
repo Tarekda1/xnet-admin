@@ -22,14 +22,15 @@ module.exports = merge(common, {
 	externals: {
 		// global app config object
 		config: JSON.stringify({
-			apiUrl: 'http://localhost:5000/xnet-68e82/europe-west1/api'
+			apiUrl: "https://europe-west1-xnet-68e82.cloudfunctions.net/api"
+			//'http://localhost:5000/xnet-68e82/europe-west1/api'
 		})
 	},
 	module: {
 		rules: [
 			{
 				test: /\.css$/,
-				use: [ { loader: 'style-loader' }, { loader: 'css-loader' } ]
+				use: [{ loader: 'style-loader' }, { loader: 'css-loader' }]
 			},
 			{
 				test: /\.less$/,
@@ -40,7 +41,7 @@ module.exports = merge(common, {
 						loader: 'less-loader',
 						options: {
 							lessOptions: {
-								paths: [ path.resolve(__dirname, 'src'), path.resolve(__dirname, 'node_modules') ]
+								paths: [path.resolve(__dirname, 'src'), path.resolve(__dirname, 'node_modules')]
 							}
 						}
 					} //1. Turns less into css
