@@ -209,38 +209,45 @@ const CustomerRow = memo(({ subscriber, userInfo }) => {
   const [subscriptionId, setSusbcriptionId] = useState(-1);
   const dispatch = useDispatch();
   const postPaid = useCallback(async (subscriberId) => {
-    setSusbcriptionId(subscriberId)
-    setUpdating(true);
-    const resp = await customerService.postPaid(subscriberId, {
-      username: userInfo.username,
-    });
-    console.log(resp);
-    if (resp && resp.code == 200) {
-      dispatch(globalActions.updateSubscriber(subscriberId))
+    try {
+      setSusbcriptionId(subscriberId)
+      setUpdating(true);
+      const resp = await customerService.postPaid(subscriberId, {
+        username: userInfo.username,
+      });
+      console.log(resp);
+      if (resp && resp.code == 200) {
+        dispatch(globalActions.updateSubscriber(subscriberId,true))
+      }
+    } catch (err) {
+      console.log(err);
     }
-    setUpdating(false);
-    setSusbcriptionId(-1)
+    finally {
+      setUpdating(false);
+      setSusbcriptionId(-1)
+    }
+
   }, []);
 
   const postUnPaid = useCallback(async (subscriberId) => {
-    setSusbcriptionId(subscriberId)
-    setUpdating(true);
-    const resp = await customerService.postUnPaid(subscriberId, {
-      username: userInfo.username,
-    });
-    console.log(resp);
-    if (resp && resp.code == 200) {
-      setSubscribers((prevSubs) => {
-        let selected = prevSubs.find(
-          (subs) => subs.subscriberId == subscriberId
-        );
-        selected.subscribtionpaid = false;
-        return [...prevSubs];
+    console.log("calling unpaid function :)")
+    try {
+      setSusbcriptionId(subscriberId)
+      setUpdating(true);
+      const resp = await customerService.postUnPaid(subscriberId, {
+        username: userInfo.username,
       });
+      console.log(resp);
+      if (resp && resp.code == 200) {
+        dispatch(globalActions.updateSubscriber(subscriberId,false))
+      }
+    } catch (err) {
+      console.log(err)
     }
-    setUpdating(false);
-    setSusbcriptionId(-1)
-
+    finally {
+      setUpdating(false);
+      setSusbcriptionId(-1)
+    }
   }, []);
   //  async (subscriberId) => {
 
@@ -255,6 +262,7 @@ const CustomerRow = memo(({ subscriber, userInfo }) => {
       <Table.Cell>
         <Checkbox
           onChange={(e, data) => {
+            console.log(`checkbox ${data.checked}`)
             if (data.checked) {
               postPaid(subscriber.subscriberId);
             } else {
