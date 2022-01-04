@@ -43,14 +43,14 @@ const globalActions = {
       payload: data,
     };
   },
-  updateSubscriber: (subscriberId) => {
+  updateSubscriber: (subscriberId,paidStatus) => {
     return async (dispatch, getState) => {
       //setSubscribers((prevSubs) => {
       const subscribers = getState().global.subscribers.slice(0);
       let selected = subscribers.find(
         (subs) => subs.subscriberId == subscriberId
       );
-      selected.subscribtionpaid = true;
+      selected.subscribtionpaid = paidStatus;
       dispatch({
         type: types.UPDATE_SUBSCRIBER,
         payload: selected
