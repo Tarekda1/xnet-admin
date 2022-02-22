@@ -3,6 +3,7 @@ import { Route, Switch, useRouteMatch } from "react-router-dom";
 import Subscribers from "./subscribers";
 import { Users } from "./users";
 import { ImportUsers } from "./subscribers/ImportUsers";
+import Expenses from "./expenses";
 
 function Admin({ match }) {
   let { path, url } = useRouteMatch();
@@ -15,6 +16,7 @@ function Admin({ match }) {
           <Route exact path={`${path}/`} component={Subscribers} />
           <Route path={`${path}/users`} component={Users} />
           <Route path={`${path}/importusers`} component={ImportUsers} />
+          <Route path={`${path}/expenses`} component={Expenses} />
         </Switch>
       </div>
     </div>
