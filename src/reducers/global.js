@@ -40,6 +40,7 @@ export default (state = initialState, action) => {
     case types.LOAD_SUBSCRIBERS:
       return { ...state, subscribers: payload, filteredSubscribers: payload.slice(0), loaded: true };
     case types.ADD_SUBSCRIBER:
+      console.log('add:' + JSON.stringify(payload));
       return { ...state, subscribers: [...state.subscribers, payload] };
     case types.CHANGE_FILTER_STATUS:
       return { ...state, status: payload };
@@ -65,7 +66,7 @@ export default (state = initialState, action) => {
       if (text != "") {
         filteredValues = filteredValues.filter(subscriber => {
           //look for objects with the received value in their ‘name’ or ‘designer’ fields
-          if (subscriber)
+          if (subscriber && subscriber.subscribername)
             return subscriber.subscribername.toLowerCase().includes(text);
           //||product.designer.toLowerCase().includes(value);
         });
