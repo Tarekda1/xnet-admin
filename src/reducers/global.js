@@ -7,7 +7,9 @@ const initialState = {
   showSearching: false,
   subscribers: [],
   appliedFilters: [],
+  status: "all",
   showMenu: false,
+  loaded: false
 };
 
 function addFilterIfNotExists(filter, appliedFilters) {
@@ -36,15 +38,21 @@ export default (state = initialState, action) => {
     case types.CHANGE_LANGUAGE:
       return { ...state, language: payload };
     case types.LOAD_SUBSCRIBERS:
-      return { ...state, subscribers: payload, filteredSubscribers: payload.slice(0), };
+      return { ...state, subscribers: payload, filteredSubscribers: payload.slice(0), loaded: true };
     case types.ADD_SUBSCRIBER:
       return { ...state, subscribers: [...state.subscribers, payload] };
+    case types.CHANGE_FILTER_STATUS:
+      return { ...state, status: payload };
     case types.UPDATE_SUBSCRIBER:
       console.log(payload);
       let myState = Object.assign({}, state);
       let index = myState.filteredSubscribers.findIndex(s => s.username == payload.username);
       console.log(index);
       myState.filteredSubscribers[index] = payload;
+      if (status == "not_paid") {
+        filteredValues = filteredValues.filter(s => s.subscribtionpaid == false);
+        newState.filteredSubscribers = filteredValues;
+      }
       return myState;
     case types.FILTER_SUBSCRIBERS:
       console.log("hello");

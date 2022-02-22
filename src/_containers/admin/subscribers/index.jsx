@@ -29,6 +29,7 @@ import { Loading } from "@/_components";
 import { globalActions } from "@/_actions/globalActions";
 import { AddEdit } from "./AddEdit";
 import "./dashboard.less";
+import types from "../../../_actions/types";
 
 const BorderLessSegment = styled(Segment)`
   border: none !important;
@@ -47,7 +48,9 @@ const FlexColumn = styled(ZeroPaddingSegment)`
 
 const ToolBar = memo(({ onSearchSubmit }) => {
   const [text, settext] = useState("");
-  const [status, setStatus] = useState("all");
+  //const [status, setStatus] = useState("all");
+  const dispatch = useDispatch();
+  const status = useSelector((state) => state.global.status);
   const history = useHistory();
   const [selectedSubscriber, setselectedSubscriber] = useState(-1);
   const [showModal, setshowModal] = useState(false);
@@ -63,7 +66,8 @@ const ToolBar = memo(({ onSearchSubmit }) => {
   };
   const btnStatusHandler = (statusData) => {
     console.log(`status: ${statusData}`);
-    setStatus(statusData)
+    //setStatus(statusData)
+    dispatch({ type: types.CHANGE_FILTER_STATUS, payload: statusData });
     onSearchSubmit(text, statusData);
   };
   const debouncedChangeHandler = useMemo(
@@ -140,6 +144,7 @@ const ToolBar = memo(({ onSearchSubmit }) => {
 });
 
 const Subscribers = ({ subscribers }) => {
+  const status = useSelector((state) => state.global.status);
   const loading = useSelector((state) => state.global.showLoading);
   const userInfo = useSelector((state) => state.user.userInfo);
   const tableHeader = [
@@ -171,8 +176,8 @@ const Subscribers = ({ subscribers }) => {
             <ZeroPaddingSegment>
               <strong>Total: </strong>
               {subscribers && subscribers.length}
-              <strong> Total Paid: </strong>
-              {nbofPaid(subscribers)}
+              {status == "all" && <strong> Total Paid: </strong>}
+              {status == "all" && nbofPaid(subscribers)}
             </ZeroPaddingSegment>
             <Table celled striped className="subsriber__table">
               <Table.Header>
@@ -207,6 +212,7 @@ const Subscribers = ({ subscribers }) => {
 const CustomerRow = memo(({ subscriber, userInfo }) => {
   const [updating, setUpdating] = useState(false);
   const [subscriptionId, setSusbcriptionId] = useState(-1);
+  const status = useSelector((state) => state.global.status);
   const dispatch = useDispatch();
   const postPaid = useCallback(async (subscriberId) => {
     try {
@@ -217,7 +223,7 @@ const CustomerRow = memo(({ subscriber, userInfo }) => {
       });
       console.log(resp);
       if (resp && resp.code == 200) {
-        dispatch(globalActions.updateSubscriber(subscriberId,true))
+        dispatch(globalActions.updateSubscriber(subscriberId, true))
       }
     } catch (err) {
       console.log(err);
@@ -239,7 +245,7 @@ const CustomerRow = memo(({ subscriber, userInfo }) => {
       });
       console.log(resp);
       if (resp && resp.code == 200) {
-        dispatch(globalActions.updateSubscriber(subscriberId,false))
+        dispatch(globalActions.updateSubscriber(subscriberId, false))
       }
     } catch (err) {
       console.log(err)
@@ -287,26 +293,12 @@ const CustomerRow = memo(({ subscriber, userInfo }) => {
 function index({ history }) {
   const userInfo = useSelector((state) => state.user.userInfo);
   const subscribers = useSelector((state) => state.global.filteredSubscribers, [shallowEqual]);
-  //const [subscribers, setSubscribers] = useState([]);
-  //const [loading, setloading] = useState(false);
   const dispatch = useDispatch();
   const isVisibleRef = useRef(false);
 
-  // const fetchCustomers = useCallback(async () => {
-  //   setloading(true);
-  //   const remoteCustomers = await customerService.getAllCustomers();
-  //   console.log("from fetch", remoteCustomers);
-  //   if (isVisibleRef.current) {
-  //     setSubscribers(remoteCustomers || []);
-  //     setloading(false);
-  //   }
-  // }, []);
 
   useEffect(() => {
     isVisibleRef.current = true;
-
-    // && _.isEmpty(userInfo.customers)
-    //fetchCustomers();
     dispatch(globalActions.fetchSubscribers());
 
     return () => {

@@ -20,6 +20,8 @@ import "./dashboard.less";
 import { globalActions } from "@/_actions/globalActions";
 import { Role } from "@/_helpers";
 import { debounce } from "lodash";
+import lodash from "lodash";
+import types from "@/_actions/types";
 
 const BorderLessSegment = styled(Segment)`
   border: none !important;
@@ -74,6 +76,7 @@ function Dashboard({ history }) {
   const userInfo = useSelector((state) => state.user.userInfo);
   const subscribers = useSelector((state) => state.global.filteredSubscribers);
   const loading = useSelector((state) => state.global.showLoading);
+  const loaded = useSelector((state) => state.global.loaded);
   const dispatch = useDispatch();
   const tableHeader = [
     "اسم المستخدم",
@@ -85,23 +88,10 @@ function Dashboard({ history }) {
     "تاريخ الدفع",
     "ملاحظة",
   ];
-  //const [subscribers, setSubscribers] = useState([]);
-  //const [loading, setloading] = useState(false);
   const isVisibleRef = useRef(false);
 
   useEffect(() => {
     isVisibleRef.current = true;
-    // async function fetchCustomers() {
-    //   setloading(true);
-    //   //console.log('agent id', userInfo);
-    //   const remoteCustomers = await customerService.getAllCustomers();
-    //   console.log("from fetch", remoteCustomers);
-    //   if (isVisibleRef.current) {
-    //     setSubscribers(remoteCustomers || []);
-    //     setloading(false);
-    //   }
-    // }
-    // && _.isEmpty(userInfo.customers)
     if (userInfo.role === Role.Collector) {
       dispatch(globalActions.fetchSubscribers());
     }
@@ -111,28 +101,22 @@ function Dashboard({ history }) {
     };
   }, [userInfo]);
 
+  useEffect(() => {
+    console.log("filtering not paid");
+    if (loading == false && !_.isEmpty(subscribers))
+      dispatch(globalActions.filterSusbcribers({ status: "not_paid", text: "" }));
+    return () => {
+    };
+  }, [loading]);
+
+
+
   const onSearchSubmit = (text) => {
-    //setloading(true);
-    //console.log('agent id', userInfo);
-    //let remoteCustomers;
-
     try {
-      // dispatch(globalActions.shouldLoad(true));
-      // if (text) {
-      //   remoteCustomers = await customerService.search(`username=${text}`);
-      // } else {
-      //   remoteCustomers = await customerService.getAllCustomers();
-      // }
-
-      // console.log("from fetch", remoteCustomers);
-      // dispatch(globalActions.loadSusbcribers(remoteCustomers || []));
-      //let input = e.target.value;
       console.log("dispatch")
       dispatch(globalActions.filterSusbcribers({ value: text }))
     } catch (error) {
       console.log(error);
-    } finally {
-      //dispatch(globalActions.shouldLoad(false));
     }
   };
 
@@ -152,7 +136,7 @@ function Dashboard({ history }) {
                 </Table.Row>
               </Table.Header>
               <Table.Body>
-                {subscribers.map((subscriber, index) => (
+                {subscribers && subscribers.map((subscriber, index) => (
                   <Subscriber
                     key={subscriber.subscriberId}
                     subscriber={subscriber}
