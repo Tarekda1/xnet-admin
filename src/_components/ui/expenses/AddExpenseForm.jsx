@@ -1,21 +1,37 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { Input, Button, Form, Container, Segment } from 'semantic-ui-react';
+import { Input, Button, Form, Container, Segment, Grid, Icon } from 'semantic-ui-react';
+import styled from 'styled-components';
+import { UseAddExpense } from "@/_hooks";
 import { v4 as uuidv4 } from 'uuid';
+import "./expenseform.less"
+
+const FullWidthButton = styled(Button)`
+    width:100%;
+`
 
 export const AddExpenseForm = () => {
+    const { addExpense, error, loading } = UseAddExpense();
     const dispatch = useDispatch();
 
     const [name, setName] = useState('');
     const [cost, setCost] = useState('');
+    const [description, setDescription] = useState('');
 
-    const onSubmit = (event) => {
+    var columnStyle = {
+        padding: "0 !important"
+    };
+
+    const onSubmit = async (event) => {
         event.preventDefault();
+        console.log(cost);
         const expense = {
-            id: uuidv4(),
             name,
-            cost: parseInt(cost),
+            description,
+            value: parseInt(cost),
         };
+
+        await addExpense(expense);
 
         dispatch({
             type: 'ADD_EXPENSE',
@@ -27,33 +43,49 @@ export const AddExpenseForm = () => {
     };
 
     return (
-        <Form onSubmit={onSubmit}>
-            <Form.Field width={'3'}>
-                <label for='name'>Name</label>
-                <input
-                    required='required'
-                    type='text'
-                    class='form-control'
-                    id='name'
-                    value={name}
-                    onChange={(event) => setName(event.target.value)}
-                />
-            </Form.Field>
-            <Form.Field width={'3'}>
-                <label for='cost'>Cost</label>
-                <input
-                    required='required'
-                    type='number'
-                    class='form-control'
-                    id='cost'
-                    value={cost}
-                    onChange={(event) => setCost(event.target.value)}
-                />
-            </Form.Field>
-            <Button type='submit' class='btn btn-primary'>
-                Save
-            </Button>
-        </Form>
+        <div stackable basic textAlign='left' style={{ padding: '0 !important' }}>
+            <Form onSubmit={onSubmit} widths={'equal'}>
+                <Form.Field>
+                    <label htmlFor='name'>Name</label>
+                    <input
+                        required='required'
+                        type='text'
+                        className="form__input"
+                        id='name'
+                        width={12}
+                        fluid
+                        value={name}
+                        onChange={(event) => setName(event.target.value)}
+                    />
+                </Form.Field>
+                <Form.Field>
+                    <label htmlFor='cost'>Cost</label>
+                    <input
+                        required='required'
+                        className="form__input"
+                        id='cost'
+                        fluid
+                        value={cost}
+                        onChange={(event) => setCost(event.target.value)}
+                    />
+                </Form.Field>
+                <Form.Field>
+                    <label htmlFor='description'>Description</label>
+                    <input
+                        required='required'
+                        className="form__input"
+                        id='description'
+                        fluid
+                        value={description}
+                        onChange={(event) => setDescription(event.target.value)}
+                    />
+                </Form.Field>
+                <FullWidthButton loading={loading} type='submit' className='btn basicStyle'>
+                    <Icon name="plus" />
+                    Save
+                </FullWidthButton>
+            </Form>
+        </div >
     );
 };
 

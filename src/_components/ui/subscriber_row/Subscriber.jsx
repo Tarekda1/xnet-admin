@@ -26,15 +26,7 @@ const Subscriber = ({ subscriber }) => {
     console.log(resp);
     if (resp && resp.code == 200) {
       dispatch(globalActions.updateSubscriber(subscriberId));
-      // setSubscribers((prevSubs) => {
-      //   let selected = prevSubs.find(
-      //     (subs) => subs.subscriberId == subscriberId
-      //   );
-      //   selected.subscribtionpaid = true;
-      //   return [...prevSubs];
-      // });
     }
-    //dispatch(globalActions.shouldLoad(false));
   };
   return (
     <Table.Row fluid="true" key={subscriber.subscriberId}>

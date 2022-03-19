@@ -104,10 +104,10 @@ function handleResponse(response) {
           data.code.includes("auth/argument-error"))
       ) {
         console.log("logging out");
-        accountService.logout(() => history.push("/account/login"));
+        accountService.logout(() => history.replace("/account/login"));
       } else if ([401, 403].includes(response.status) && getToken() != null) {
         // auto logout if 401 Unauthorized or 403 Forbidden response returned from api
-        accountService.logout(() => history.push("/account/login"));
+        accountService.logout(() => history.replace("/account/login"));
       } else if ([401, 403].includes(response.status) && getToken() == null) {
         history.push("./login");
       }

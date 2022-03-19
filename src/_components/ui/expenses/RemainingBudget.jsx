@@ -7,7 +7,7 @@ export const RemainingBudget = () => {
     const budget = useSelector(state => state.expense.budget)
 
     const totalExpenses = expenses.reduce((total, item) => {
-        return (total += item.cost);
+        return (total += item.value);
     }, 0);
 
     const alertType = totalExpenses > budget ? 'alert-danger' : 'alert-success';

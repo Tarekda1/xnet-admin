@@ -16,6 +16,11 @@ const initialState = {
 export default (state = initialState, action) => {
     const { type, payload } = action;
     switch (type) {
+        case 'LOAD_EXPENSES':
+            return {
+                ...state,
+                expenses: [...payload],
+            };
         case 'ADD_EXPENSE':
             return {
                 ...state,

@@ -6,7 +6,7 @@ export const ExpenseTotal = () => {
     const expenses = useSelector(state => state.expense.expenses)
 
     const total = expenses.reduce((total, item) => {
-        return (total += (item.cost >= 0 ? 0 : item.cost));
+        return (total += (item.value >= 0 ? 0 : item.value));
     }, 0);
 
     return (

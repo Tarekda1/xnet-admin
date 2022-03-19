@@ -7,7 +7,7 @@ import { Segment } from 'semantic-ui-react';
 export const Budget = () => {
     const dispatch = useDispatch();
     const budget = useSelector(state => state.expense.expenses)
-        .reduce((acc, expense) => acc + (expense.cost <= 0 ? 0 : expense.cost), 0);
+        .reduce((acc, expense) => acc + (expense.value <= 0 ? 0 : expense.value), 0);
     const [isEditing, setIsEditing] = useState(false);
 
     const handleEditClick = () => {

@@ -22,8 +22,8 @@ module.exports = merge(common, {
 	externals: {
 		// global app config object
 		config: JSON.stringify({
-			apiUrl: "https://europe-west1-xnet-68e82.cloudfunctions.net/api"
-			//'http://localhost:5000/xnet-68e82/europe-west1/api'
+			apiUrl: //"https://europe-west1-xnet-68e82.cloudfunctions.net/api"
+				'http://localhost:5000/xnet-68e82/europe-west1/api'
 		})
 	},
 	module: {
