@@ -30,7 +30,7 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 expenses: state.expenses.filter(
-                    (expense) => expense.id !== action.payload
+                    (expense) => expense.expenseId !== action.payload
                 ),
             };
         case 'SET_BUDGET':

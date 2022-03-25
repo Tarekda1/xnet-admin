@@ -1,7 +1,7 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { useDispatch } from 'react-redux';
-import { List, Segment } from 'semantic-ui-react';
-import styled from "styled-components";
+import { Button, List, Icon } from 'semantic-ui-react';
+import { UseDeleteExpense } from "@/_hooks";
 import "./expenseform.less"
 
 function moneyFormatter(num) {
@@ -22,12 +22,14 @@ function moneyFormatter(num) {
 
 
 const ExpenseItem = ({ name, cost, id }) => {
+    const { deleteExpense, error, loading } = UseDeleteExpense();
     const dispatch = useDispatch();
 
-    const handleDeleteExpense = () => {
+    const handleDeleteExpense = async () => {
+        await deleteExpense(id);
         dispatch({
             type: 'DELETE_EXPENSE',
-            payload: props.id,
+            payload: id,
         });
     };
     const sign = cost < 0 ? '-' : '+';
@@ -37,7 +39,11 @@ const ExpenseItem = ({ name, cost, id }) => {
             <List.Content basic floated='left'>{name}</List.Content>
             <List.Content basic floated='right'>
                 {sign}{moneyFormatter(cost)}
-                <i class="trash icon" size='1.5em' style={{ marginLeft: "10px", zIndex: 1000 }} onClick={handleDeleteExpense} />
+                <Button loading={loading}
+                    style={{ marginLeft: "10px", padding: "2px", zIndex: 1000, background: "none" }}
+                    onClick={handleDeleteExpense}>
+                    <Icon name='trash' />
+                </Button>
             </List.Content>
         </List.Item>
     );
