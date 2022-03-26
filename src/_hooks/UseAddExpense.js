@@ -11,7 +11,6 @@ const UseAddExpense = (props) => {
             setLoading(true);
             const remoteExpenses = await expenseService.postExpense(expense);
             console.log(JSON.stringify(remoteExpenses));
-            setExpenses(prev => [...prev, expense]);
             setLoading(false);
         } catch (error) {
             console.log(error);
