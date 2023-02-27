@@ -1,4 +1,4 @@
-import types from "@/_actions/types";
+import types from "@/actions/types";
 
 const initialState = {
   language: "en",
@@ -9,7 +9,7 @@ const initialState = {
   appliedFilters: [],
   status: "all",
   showMenu: false,
-  loaded: false
+  loaded: false,
 };
 
 function addFilterIfNotExists(filter, appliedFilters) {
@@ -38,20 +38,29 @@ export default (state = initialState, action) => {
     case types.CHANGE_LANGUAGE:
       return { ...state, language: payload };
     case types.LOAD_SUBSCRIBERS:
-      return { ...state, subscribers: payload, filteredSubscribers: payload.slice(0), loaded: true };
+      return {
+        ...state,
+        subscribers: payload,
+        filteredSubscribers: payload.slice(0),
+        loaded: true,
+      };
     case types.ADD_SUBSCRIBER:
-      console.log('add:' + JSON.stringify(payload));
+      console.log("add:" + JSON.stringify(payload));
       return { ...state, subscribers: [...state.subscribers, payload] };
     case types.CHANGE_FILTER_STATUS:
       return { ...state, status: payload };
     case types.UPDATE_SUBSCRIBER:
       console.log(payload);
       let myState = Object.assign({}, state);
-      let index = myState.filteredSubscribers.findIndex(s => s.username == payload.username);
+      let index = myState.filteredSubscribers.findIndex(
+        (s) => s.username == payload.username
+      );
       console.log(index);
       myState.filteredSubscribers[index] = payload;
       if (status == "not_paid") {
-        filteredValues = filteredValues.filter(s => s.subscribtionpaid == false);
+        filteredValues = filteredValues.filter(
+          (s) => s.subscribtionpaid == false
+        );
         newState.filteredSubscribers = filteredValues;
       }
       return myState;
@@ -64,7 +73,7 @@ export default (state = initialState, action) => {
       console.log(status);
       let filteredValues = newState.subscribers;
       if (text != "") {
-        filteredValues = filteredValues.filter(subscriber => {
+        filteredValues = filteredValues.filter((subscriber) => {
           //look for objects with the received value in their ‘name’ or ‘designer’ fields
           if (subscriber && subscriber.subscribername)
             return subscriber.subscribername.toLowerCase().includes(text);
@@ -74,7 +83,9 @@ export default (state = initialState, action) => {
 
       if (status !== "all") {
         let paid = status == "paid";
-        filteredValues = filteredValues.filter(s => s.subscribtionpaid == paid);
+        filteredValues = filteredValues.filter(
+          (s) => s.subscribtionpaid == paid
+        );
       }
       //set filtered subscribers to new values
       newState.filteredSubscribers = filteredValues;

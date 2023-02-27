@@ -6,17 +6,17 @@ import {
   BrowserRouter as Router,
 } from "react-router-dom";
 import "./App.less";
-import { PrivateRoute, Alert } from "@/_components";
-import { AppSidebar } from "@/_components/ui/app_sidebar/AppSidebar";
-import { Dashboard } from "@/_containers/dashboard";
-import { Account } from "@/_containers/account";
-import { Admin } from "@/_containers/admin";
+import { PrivateRoute, Alert } from "@/components";
+import { AppSidebar } from "@/components/ui/app_sidebar/AppSidebar";
+import { Dashboard } from "@/pages/dashboard";
+import { Account } from "@/pages/account";
+import { Admin } from "@/pages/admin";
 import { Provider } from "react-redux";
 import { store } from "./store";
-import { TopNavigation } from "@/_components";
+import { TopNavigation } from "@/components";
 import "react-notifications-component/dist/theme.css";
 import { Container } from "semantic-ui-react";
-import { CustomSwitch } from "@/_components";
+import { CustomSwitch } from "@/components";
 
 function App({ trans }) {
   return (
