@@ -7,6 +7,7 @@ import {
 } from "react-router-dom";
 import "./App.less";
 import { PrivateRoute, Alert } from "@/components";
+import { FirebaseProvider } from "@/components";
 import { AppSidebar } from "@/components/ui/app_sidebar/AppSidebar";
 import { Dashboard } from "@/pages/dashboard";
 import { Account } from "@/pages/account";
@@ -22,22 +23,24 @@ function App({ trans }) {
   return (
     <Provider store={store}>
       <Router>
-        <AppSidebar>
-          <Alert />
-          <TopNavigation i18n={trans} />
-          <Container fluid={true} className="resp__container">
-            <CustomSwitch>
-              <PrivateRoute exact path="/dashboard" component={Dashboard} />
-              <Route path="/account">
-                <Account />
-              </Route>
-              <PrivateRoute path="/admin">
-                <Admin />
-              </PrivateRoute>
-              <Redirect from="*" to="/dashboard" />
-            </CustomSwitch>
-          </Container>
-        </AppSidebar>
+        <FirebaseProvider>
+          <AppSidebar>
+            <Alert />
+            <TopNavigation i18n={trans} />
+            <Container fluid={true} className="resp__container">
+              <CustomSwitch>
+                <PrivateRoute exact path="/dashboard" component={Dashboard} />
+                <Route path="/account">
+                  <Account />
+                </Route>
+                <PrivateRoute path="/admin">
+                  <Admin />
+                </PrivateRoute>
+                <Redirect from="*" to="/dashboard" />
+              </CustomSwitch>
+            </Container>
+          </AppSidebar>
+        </FirebaseProvider>
       </Router>
     </Provider>
   );

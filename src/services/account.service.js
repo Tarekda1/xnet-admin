@@ -1,9 +1,9 @@
 import { BehaviorSubject } from "rxjs";
 import { fetchWrapper, history } from "@/helpers";
-// const config = {
-// 	apiUrl: 'http://localhost:3000/api/v1'
-// };
 import { getToken, clearToken } from "@/helpers";
+import firebase from "../components/firebaseutility/firebase";
+import { useAuthState } from "react-firebase-hooks/auth";
+import user from "../reducers/user";
 const userSubject = new BehaviorSubject(null);
 const config = require("config");
 const baseUrl = `${config.apiUrl}/users`;
@@ -29,29 +29,35 @@ export const accountService = {
   },
 };
 
-function login(email, password) {
-  return fetchWrapper
-    .post(`${baseUrl}/login`, { email, password })
-    .then((user) => {
-      //startRefreshTokenTimer();
-      console.log("user", user);
-      return user;
-    });
+async function login(email, password) {
+  // return fetchWrapper
+  //   .post(`${baseUrl}/login`, { email, password })
+  //   .then((user) => {
+  //     //startRefreshTokenTimer();
+  //     console.log("user", user);
+  //     return user;
+  //   });
+
+  const { user: resp } = await firebase
+    .auth()
+    .signInWithEmailAndPassword(email, password);
+  const token = resp.getIdToken();
+  const userData = await fetchWrapper.get(`${baseUrl}/data`);
+  return { ...user, token, username: userData.username, role: userData.role };
 }
 
 function logout(callback) {
-  // revoke token, stop refresh timer, publish null to user subscribers and redirect to login page
-  //localStorage.removeItem("token");
-  // fetchWrapper.post(`${baseUrl}/revoke-token`, {}).then(
-  // 	() => {
-  //stopRefreshTokenTimer();
-  if (getToken() !== undefined) clearToken();
-  callback && callback();
-  // 	},
-  // 	() => {
-  // 		callback && callback();
-  // 	}
-  // );
+  // if (getToken() !== undefined) clearToken();
+  // callback && callback();
+  firebase
+    .auth()
+    .signOut()
+    .then(() => {
+      allback && callback();
+    })
+    .catch((error) => {
+      console.error("Error signing out", error);
+    });
 }
 
 function refreshToken() {

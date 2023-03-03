@@ -14,4 +14,6 @@ export * from "./checkUser/CheckUser";
 export * from "./ui/img_upload/ImgUpload";
 export * from "./CustomSwitch";
 export * from "./ui/subscriber_row/Subscriber";
-export * from "./ui/expenses"
+export * from "./ui/expenses";
+export * from "./FirebaseAuth/FirebaseAuthProvider";
+export * from "./firebaseutility/firebase";

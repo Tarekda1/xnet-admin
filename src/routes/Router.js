@@ -7,6 +7,10 @@ import {
   useLocation,
 } from "react-router-dom";
 
+export const FirebaseProvider = withSuspense(
+  lazy < any > (() => import("@components/FirebaseAuth"))
+);
+
 const Router = () => {
   const location = useLocation();
   const history = useHistory();
