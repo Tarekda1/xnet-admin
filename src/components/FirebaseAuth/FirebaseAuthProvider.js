@@ -22,15 +22,36 @@ const FirebaseProvider = ({ children, onRedirectCallback }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const location = useLocation();
 
+  function getCurrentUser(auth) {
+    return new Promise((resolve, reject) => {
+      const unsubscribe = auth.onAuthStateChanged((user) => {
+        unsubscribe();
+        resolve(user);
+      }, reject);
+    });
+  }
+
   useEffect(() => {
-    console.log(user);
-    if (!user) {
-      onRedirectCallback("/dashboard");
+    const user = getCurrentUser(firebase.auth());
+    console.log(`user inside provider: ${user}`);
+    if (!user || user == null) {
+      onRedirectCallback({ targetUrl: "/account/login" });
     }
   }, []);
 
   const getTokenSilently = useCallback(
     (firebaseAuth) => firebaseAuth.getIdToken(),
+    []
+  );
+
+  const logout = useCallback(
+    () =>
+      firebase
+        .auth()
+        .signOut()
+        .catch((error) => {
+          console.error("Error signing out", error);
+        }),
     []
   );
 
@@ -40,7 +61,6 @@ const FirebaseProvider = ({ children, onRedirectCallback }) => {
         isAuthenticated,
         user,
         loading,
-        loginWithRedirect,
         getTokenSilently,
         logout,
       }}
@@ -49,5 +69,4 @@ const FirebaseProvider = ({ children, onRedirectCallback }) => {
     </FirebaseContext.Provider>
   );
 };
-
-export { FirebaseProvider };
+export default FirebaseProvider;

@@ -95,7 +95,7 @@ function handleResponse(response) {
     // console.log("resp", data);
     // console.log("ok", response.ok);
     if (data.error == "Unauthorized") {
-      accountService.logout(() => history.push("./login"));
+      accountService.logout(() => history.replace("/account/login"));
     } else if (!response.ok) {
       //&& accountService.userValue
       if (

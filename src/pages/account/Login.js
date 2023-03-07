@@ -14,18 +14,20 @@ import * as Yup from "yup";
 import userActions from "@/actions/userActions";
 import { useTranslation } from "react-i18next";
 import { accountService, alertService } from "@/services";
+import firebase from "../../components/firebaseutility/firebase";
+import { useAuthState } from "react-firebase-hooks/auth";
 import logo from "@/images/xnet_logo_main.png";
 import { Role } from "@/helpers/Role";
 
 function Login({ history, location }) {
   const { t } = useTranslation();
   const dispatch = useDispatch();
+  const [user, loading, error] = useAuthState(firebase.auth());
   const token = useSelector((state) => state.user.token);
   const userInfo = useSelector((state) => state.user.userInfo);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [progress, setProgress] = useState(false);
-  const [error, setError] = useState("");
   const isVisible = useRef(true);
 
   const validationSchema = Yup.object().shape({
@@ -35,7 +37,9 @@ function Login({ history, location }) {
 
   useEffect(() => {
     if (isVisible.current) {
-      if (token && sessionStorage.getItem("token")) {
+      // token && sessionStorage.getItem("token")
+      console.log(`user inside login: ${user}`);
+      if (user !== null && userInfo.role !== undefined) {
         console.log("role", userInfo.role);
         console.log("role constant", Role.Admin);
         if (userInfo.role == Role.Admin) {
@@ -50,7 +54,7 @@ function Login({ history, location }) {
       }
     }
     return () => {
-      isVisible.current = false;
+      isVisible.current = null;
     };
   }, [token, dispatch]);
 
@@ -98,14 +102,14 @@ function Login({ history, location }) {
         </Header>
         <Segment stacked>
           <div className="card-body" />
-          <Form autocomplete="off">
+          <Form autoComplete="off">
             <Form.Input
               fluid
               icon="user"
               iconPosition="left"
               placeholder="الايميل"
               name="username"
-              autocomplete="off"
+              autoComplete="off"
               onChange={(e) => setUsername(e.target.value)}
             />
             <Form.Input
@@ -113,7 +117,7 @@ function Login({ history, location }) {
               icon="lock"
               iconPosition="left"
               placeholder="كلمة السر"
-              autocomplete="off"
+              autoComplete="off"
               type="password"
               name="password"
               onChange={(e) => setPassword(e.target.value)}

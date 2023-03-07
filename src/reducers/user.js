@@ -16,7 +16,7 @@ export default (state = initialState, action) => {
       console.log(userInfo);
       const { displayName, role, email, uid, imageUrl, username } =
         userInfo.info;
-      sessionStorage.setItem("token", token);
+      localStorage.setItem("token", token);
       return {
         ...state,
         token: token,
@@ -30,7 +30,7 @@ export default (state = initialState, action) => {
         },
       };
     case types.PERFORM_LOGOUT:
-      sessionStorage.removeItem("token");
+      localStorage.removeItem("token");
       return {
         token: "",
         userInfo: {},

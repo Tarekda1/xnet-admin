@@ -2,7 +2,6 @@ import { BehaviorSubject } from "rxjs";
 import { fetchWrapper, history } from "@/helpers";
 import { getToken, clearToken } from "@/helpers";
 import firebase from "../components/firebaseutility/firebase";
-import { useAuthState } from "react-firebase-hooks/auth";
 import user from "../reducers/user";
 const userSubject = new BehaviorSubject(null);
 const config = require("config");
@@ -41,9 +40,12 @@ async function login(email, password) {
   const { user: resp } = await firebase
     .auth()
     .signInWithEmailAndPassword(email, password);
-  const token = resp.getIdToken();
-  const userData = await fetchWrapper.get(`${baseUrl}/data`);
-  return { ...user, token, username: userData.username, role: userData.role };
+  // const token = await resp.getIdToken();
+  // const userData = await fetchWrapper.get(`${baseUrl}/data/${email}`);
+  // return { ...user, token, username: userData.username, role: userData.role };
+
+  const user = await fetchWrapper.post(`${baseUrl}/login`, { email, password });
+  return user;
 }
 
 function logout(callback) {
@@ -53,7 +55,7 @@ function logout(callback) {
     .auth()
     .signOut()
     .then(() => {
-      allback && callback();
+      callback && callback();
     })
     .catch((error) => {
       console.error("Error signing out", error);

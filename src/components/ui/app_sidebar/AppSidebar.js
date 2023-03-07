@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useHistory, Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
+import { getToken } from "@/helpers/utility";
 import { Icon, Menu, Sidebar, Image, Header } from "semantic-ui-react";
-import { useTranslation } from "react-i18next";
 import logo from "@/images/xnet_logo_main.png";
 import "./AppSidebar.less";
 function AppSidebar(props) {
@@ -11,7 +11,7 @@ function AppSidebar(props) {
   const user = useSelector((state) => state.user.userInfo);
   const visible = useSelector((state) => state.global.showMenu);
 
-  const token = sessionStorage.getItem("token");
+  const token = getToken();
 
   return token ? (
     <Sidebar.Pushable>
