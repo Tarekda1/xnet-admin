@@ -14,9 +14,9 @@ function Admin({ match }) {
       <div className="container">
         <Switch>
           <Route exact path={`${path}/`} component={Subscribers} />
-          <Route path={`${path}/users`} component={Users} />
-          <Route path={`${path}/importusers`} component={ImportUsers} />
-          <Route path={`${path}/expenses`} component={Expenses} />
+          <Route exact path={`${path}/users`} component={Users} />
+          <Route exact path={`${path}/importusers`} component={ImportUsers} />
+          <Route exact path={`${path}/expenses`} component={Expenses} />
         </Switch>
       </div>
     </div>

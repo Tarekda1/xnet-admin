@@ -1,6 +1,5 @@
 import config from "config";
 import { accountService } from "@/services";
-import { history } from "./history";
 import { getToken } from "./utility";
 
 export const fetchWrapper = {
@@ -104,12 +103,12 @@ function handleResponse(response) {
           data.code.includes("auth/argument-error"))
       ) {
         console.log("logging out");
-        accountService.logout(() => history.replace("/account/login"));
+        accountService.logout(() => (window.location = "/account/login"));
       } else if ([401, 403].includes(response.status) && getToken() != null) {
         // auto logout if 401 Unauthorized or 403 Forbidden response returned from api
-        accountService.logout(() => history.replace("/account/login"));
+        accountService.logout(() => (window.location = "/account/login"));
       } else if ([401, 403].includes(response.status) && getToken() == null) {
-        history.push("./login");
+        accountService.logout(() => (window.location = "/account/login"));
       }
       const error = (data && data.message) || response.statusText;
       return Promise.reject(error);

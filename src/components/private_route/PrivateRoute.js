@@ -5,15 +5,15 @@ import firebase from "../firebaseutility/firebase";
 
 const PrivateRoute = ({ comp: Component, ...rest }) => {
   const [user] = useAuthState(firebase.auth());
+
+  const componentRender = (props) =>
+    Component ? <Component {...props} /> : null;
+
   return (
     <Route
       {...rest}
       render={(props) =>
-        user != null ? (
-          <Component {...props} />
-        ) : (
-          <Redirect to="/account/login" />
-        )
+        user != null ? componentRender : <Redirect to="/account/login" />
       }
     />
   );

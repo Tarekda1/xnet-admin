@@ -42,8 +42,8 @@ const UploadedUsers = ({ headerData, body, enableAction }) => {
                     onChange={(e, d) => handleChange(e, d, index)}
                   />
                 </Table.Cell>
-                {row.map((col, subIndex) => {
-                  return <Table.Cell key={subIndex}>{col}</Table.Cell>;
+                {Object.keys(row).map((key, subindex) => {
+                  return <Table.Cell key={key}>{row[key]}</Table.Cell>;
                 })}
               </Table.Row>
             );

@@ -15,6 +15,7 @@ import { TopNavigation } from "@/components";
 import { CustomSwitch } from "@/components";
 import "react-notifications-component/dist/theme.css";
 import { Container } from "semantic-ui-react";
+import { NotFoundPage } from "./pages";
 
 const withSuspense = (WrappedComponent) => {
   return (props) => {
@@ -64,10 +65,14 @@ const Router = ({ trans }) => {
               <Route path="/account">
                 <Account />
               </Route>
-              <PrivateRoute path="/admin">
-                <Admin />
-              </PrivateRoute>
-              <Redirect from="*" to="/dashboard" />
+              <Route exact path={`${path}/`} component={Subscribers} />
+              <Route exact path={`${path}/users`} component={Users} />
+              <Route
+                exact
+                path={`${path}/importusers`}
+                component={ImportUsers}
+              />
+              <Route exact path={`${path}/expenses`} component={Expenses} />
             </CustomSwitch>
           </Container>
         </AppSidebar>

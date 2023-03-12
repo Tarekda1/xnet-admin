@@ -1,0 +1,33 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`NotFoundPage should match snapshot 1`] = `
+<div>
+  <main
+    class="page-container"
+  >
+    <div
+      class="page-container__inner"
+    >
+      <div
+        class="page-container__main"
+      >
+        <div
+          class="center"
+        >
+          <h1
+            class="text text--heading-xl header"
+          >
+            mock text
+          </h1>
+          <svg>
+            ufo.svg
+          </svg>
+        </div>
+      </div>
+      <div
+        class="page-container__aside"
+      />
+    </div>
+  </main>
+</div>
+`;

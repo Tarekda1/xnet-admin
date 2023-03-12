@@ -1,4 +1,5 @@
 import React, { useRef, useState } from "react";
+import { useHistory } from "react-router-dom";
 import { Options, HeaderListTemplate } from "./Constants";
 import {
   Segment,
@@ -19,8 +20,9 @@ import { globalActions } from "@/actions/globalActions";
 import { UploadFile } from "@/components/ui/upload_file/UploadFile";
 import DataHelper from "@/helpers/excel-helper";
 import { UploadedUsers } from "@/components";
+import { Loading } from "@/components";
 import { customerService } from "@/services";
-import { userAccParser } from "@/helpers";
+
 import "./importusers.less";
 
 const BorderLessSegment = styled(Segment)`
@@ -28,17 +30,19 @@ const BorderLessSegment = styled(Segment)`
   box-shadow: none !important;
 `;
 
-const ImportUsers = ({ history }) => {
+const ImportUsers = () => {
   const dispatch = useDispatch();
+  const loading = useSelector((state) => state.global.showLoading);
   const [selected, setSelected] = useState([]);
-  //const [loading, setLoading] = useState(false);
   const [uploadedUsers, setUploadedUsers] = useState([]);
+  const [header, setHeader] = useState([]);
   const [showUserModel, setShowUserModel] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const dropDownRef = useRef(null);
   const excelHelper = new DataHelper();
   const uploadRef = useRef(null);
+  const history = useHistory();
 
   const handleOnDropDownAction = (e, data) => {
     console.log(data.value);
@@ -82,9 +86,13 @@ const ImportUsers = ({ history }) => {
 
   const handleUpload = async (e) => {
     //console.log(e.target.files[0]);
-    const { data } = await excelHelper.parseExcelFile(e.target.files[0]);
-    //console.log(data);
+    dispatch(globalActions.shouldLoad(true));
+    const { header, data } = await excelHelper.parseExcelFile(
+      e.target.files[0]
+    );
+    setHeader(header);
     setUploadedUsers(data);
+    dispatch(globalActions.shouldLoad(false));
   };
 
   const handleSelect = (shouldEnable, selectedId) => {
@@ -105,12 +113,14 @@ const ImportUsers = ({ history }) => {
       dispatch(globalActions.shouldLoad(true));
       setIsSaving(true);
       console.log(typeof uploadedUsers);
-      const jsonObj = userAccParser(uploadedUsers);
-      //console.log(jsonObj);
-      const resp = await customerService.createBatch(jsonObj);
-      if (resp && resp.code === 200) {
-        console.log(resp.code);
-        history.push("./users");
+      // const jsonObj = excelHelper.parseRows(uploadedUsers, header);
+      // //console.log(jsonObj);
+      const resp = await customerService.createBatch(uploadedUsers);
+      console.log(resp);
+      if (resp && (resp.code === 200 || resp.messsage.indexOf("success"))) {
+        console.log(resp?.code);
+        //history.push("/admin");
+        window.location = "/admin";
       }
       //hide loading
       dispatch(globalActions.shouldLoad(false));
@@ -118,6 +128,7 @@ const ImportUsers = ({ history }) => {
       console.log(err);
     } finally {
       setIsSaving(false);
+      dispatch(globalActions.shouldLoad(false));
     }
   };
 
@@ -192,14 +203,16 @@ const ImportUsers = ({ history }) => {
                 />
               </div>
               <div>
-                {uploadedUsers.length > 0 ? (
-                  <UploadedUsers
-                    headerData={HeaderListTemplate}
-                    body={uploadedUsers}
-                    enableAction={handleSelect}
-                  />
+                {loading ? (
+                  <Loading />
                 ) : (
-                  ""
+                  uploadedUsers.length > 0 && (
+                    <UploadedUsers
+                      headerData={header}
+                      body={uploadedUsers}
+                      enableAction={handleSelect}
+                    />
+                  )
                 )}
               </div>
             </Segment>

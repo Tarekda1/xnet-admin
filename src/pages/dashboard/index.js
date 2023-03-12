@@ -79,14 +79,14 @@ function Dashboard({ history }) {
   const loaded = useSelector((state) => state.global.loaded);
   const dispatch = useDispatch();
   const tableHeader = [
-    "اسم المستخدم",
-    "رقم المستخدم",
-    "اسم جابي الاشتراك",
-    "مدفوع",
-    "رسم الاشتراك",
-    "تاريخ  استحقاق الاشتراك",
-    "تاريخ الدفع",
-    "ملاحظة",
+    "CustomerID",
+    "Customer Name",
+    "Email",
+    "Phone",
+    "Address",
+    "Plan",
+    "Plan Date",
+    "Status",
   ];
   const isVisibleRef = useRef(false);
 

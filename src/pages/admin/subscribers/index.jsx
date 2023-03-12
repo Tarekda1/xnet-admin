@@ -148,14 +148,12 @@ const Subscribers = ({ subscribers }) => {
   const loading = useSelector((state) => state.global.showLoading);
   const userInfo = useSelector((state) => state.user.userInfo);
   const tableHeader = [
-    "اسم المستخدم",
-    "رقم المستخدم",
-    "اسم قابض الاشتراك",
-    "مدفوع",
-    "رسم الاشتراك",
-    "تاريخ  استحقاق الاشتراك",
-    "تاريخ الدفع",
-    "ملاحظة",
+    "Username",
+    "Customer Name",
+    "Mobile",
+    "Address",
+    "Service",
+    "Expiry"
   ];
   const nbofPaid = (subscribers) => {
     console.log("updating")
@@ -184,7 +182,7 @@ const Subscribers = ({ subscribers }) => {
                 <Table.Row>
                   {tableHeader.map((header, i) => (
                     <Table.HeaderCell
-                      style={{ width: i == 7 ? "25%" : "12%" }}
+                      style={{ width: i == 5 ? "25%" : "15%" }}
                       key={i}
                     >
                       {header}
@@ -261,27 +259,13 @@ const CustomerRow = memo(({ subscriber, userInfo }) => {
   return (
     <Table.Row key={subscriber.subscriberId}>
       <Table.Cell>
-        <strong>{subscriber.subscribername}</strong>
+        <strong>{subscriber.Username}</strong>
       </Table.Cell>
-      <Table.Cell>{subscriber.username}</Table.Cell>
-      <Table.Cell>{subscriber.collectorname}</Table.Cell>
-      <Table.Cell>
-        <Checkbox
-          onChange={(e, data) => {
-            console.log(`checkbox ${data.checked}`)
-            if (data.checked) {
-              postPaid(subscriber.subscriberId);
-            } else {
-              postUnPaid(subscriber.subscriberId);
-            }
-          }}
-          checked={subscriber.subscribtionpaid}
-        />
-        {subscriptionId == subscriber.subscriberId && updating && <p>Updating</p>}
-      </Table.Cell>
-      <Table.Cell>{subscriber.subscribtionfees}</Table.Cell>
-      <Table.Cell>{subscriber.billDate}</Table.Cell>
-      <Table.Cell>{subscriber.paymentDate}</Table.Cell>
+      <Table.Cell>{subscriber.Name}</Table.Cell>
+      <Table.Cell>{subscriber.Mobile}</Table.Cell>
+      <Table.Cell>{subscriber.Address}</Table.Cell>
+      <Table.Cell>{subscriber.Service}</Table.Cell>
+      <Table.Cell>{subscriber.Expiry}</Table.Cell>
       <Table.Cell>{""}</Table.Cell>
       {/* <Table.Cell>
         <Link to={`/customer/step2?customerid=${subscriber.id}`}>{subscriber.Notes}</Link>
@@ -333,10 +317,10 @@ function index({ history }) {
         </Segment>
       )}
       <BorderLessSegment className={`${"no__padding"}`}>
-        <Fragment>
+        <>
           <ToolBar onSearchSubmit={onSearchSubmit} onPaidStatusSearch={onPaidStatusSubmit} />
           <Subscribers subscribers={subscribers} />
-        </Fragment>
+        </>
       </BorderLessSegment>
     </BorderLessSegment>
   );

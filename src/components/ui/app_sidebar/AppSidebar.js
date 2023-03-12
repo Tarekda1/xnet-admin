@@ -7,7 +7,6 @@ import logo from "@/images/xnet_logo_main.png";
 import "./AppSidebar.less";
 function AppSidebar(props) {
   const language = "en";
-  const history = useHistory();
   const user = useSelector((state) => state.user.userInfo);
   const visible = useSelector((state) => state.global.showMenu);
 
@@ -42,7 +41,7 @@ function AppSidebar(props) {
             name="users"
             style={{ float: "left", margin: "0px 5px" }}
           />
-          <Link to="/admin">Subscribers</Link>
+          <Link to="/admin/users">Users</Link>
         </Menu.Item>
         <Menu.Item icon>
           <Icon
@@ -50,7 +49,15 @@ function AppSidebar(props) {
             name="users"
             style={{ float: "left", margin: "0px 5px" }}
           />
-          <Link to="/admin/users">Users</Link>
+          <Link to="/admin">Subscribers</Link>
+        </Menu.Item>
+        <Menu.Item icon>
+          <Icon
+            floated="left"
+            name="money"
+            style={{ float: "left", margin: "0px 5px" }}
+          />
+          <Link to="/admin/plans">Plans</Link>
         </Menu.Item>
         <Menu.Item icon>
           <Icon

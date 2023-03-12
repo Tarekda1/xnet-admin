@@ -4,33 +4,40 @@ import { userAccParser } from "@/helpers";
 export default class DataHelper {
   parseExcelFile = (filePath) => {
     return readXlsxFile(filePath).then((rows) => {
-      // `rows` is an array of rows
-      // each row being an array of cells.
-      // for (const row of rows) {
-      //   console.log(row);
-      // }
       return {
-        header: rows.unshift(),
-        data: userAccParser(rows.slice(1), true),
+        header: rows[0],
+        data: this.parseRows(rows.slice(1), rows[0]),
       };
     });
   };
 
-  parseRows = (rows) => {
-    if (!rows || rows.length == 0) throw Error("empty rows");
-    let users = [];
-    rows.map((row, index) => {
-      let user = {};
-      row.forEach((cols, idx) => {
-        switch (idx) {
-          case 0:
-            user["username"] = row[idx];
-            break;
-          case 1:
-            user["firstname"] = row[idx];
-            break;
-        }
-      });
-    });
+  parseRows = (rows, header) => {
+    if (!rows || typeof rows !== "object" || !(rows instanceof Array)) {
+      throw new Error("Invalid data type, expected an array");
+    }
+    return rows.reduce((acc, row) => {
+      console.log(row);
+      let userAcc = row.reduce((acc, col, index) => {
+        acc[header[index]] = col;
+        return acc;
+      }, {});
+      acc.push(userAcc);
+      return acc;
+    }, []);
+  };
+
+  getRows = (rows, header) => {
+    if (!rows || typeof rows !== "object" || !(rows instanceof Array)) {
+      throw new Error("Invalid data type, expected an array");
+    }
+    return rows.reduce((acc, row) => {
+      console.log(row);
+      let userAcc = row.reduce((acc, col, index) => {
+        acc[header[index]] = col;
+        return acc;
+      }, {});
+      acc.push(userAcc);
+      return acc;
+    }, []);
   };
 }
