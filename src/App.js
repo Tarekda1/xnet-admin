@@ -1,15 +1,15 @@
 import React, { useCallback } from "react";
-import "./App.less";
+import "./App.scss";
 import { Provider } from "react-redux";
 import { BrowserRouter } from "react-router-dom";
 import Router from "./routes/Router";
 import { store } from "./store";
 
-function App({ trans }) {
+function App() {
   return (
     <Provider store={store}>
       <BrowserRouter>
-        <Router trans={trans} />
+        <Router />
       </BrowserRouter>
     </Provider>
   );

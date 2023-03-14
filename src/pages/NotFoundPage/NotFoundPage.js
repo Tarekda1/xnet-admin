@@ -20,10 +20,7 @@ const NotFoundPage = () => {
   return (
     <Page title="page not found">
       <div>
-        <h3 tagName="h1" headingSize="xl">
-          Page Not Found!
-        </h3>
-        <Ufo />
+        <h3>Page Not Found!</h3>
       </div>
     </Page>
   );

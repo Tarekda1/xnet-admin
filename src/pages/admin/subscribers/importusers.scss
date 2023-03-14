@@ -1,4 +1,4 @@
-@import "../../../variables.less";
+@import "../../../variables.scss";
 
 .uploadwrapper {
   display: flex;
@@ -13,13 +13,28 @@
       padding: 10px;
 
       &:before {
-        color: @secondary-color;
+        color: $secondary-color;
       }
     }
-
     span {
       margin-top: 15px;
       display: block;
     }
   }
+
 }
+
+.dropdown {
+  padding: 5px !important;
+}
+
+.actionsgroup__dropdown{
+  padding: 8px !important;
+}
+
+.actionsgroup__button{
+  background: transparent !important;
+    color: white !important;
+    padding: 5px !important;
+}
+

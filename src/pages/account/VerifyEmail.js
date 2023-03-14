@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import queryString from "query-string";
 
-import { accountService, alertService } from "@/services";
+import { accountService, alertService } from "../../services";
 
 function VerifyEmail({ history }) {
-  //const location = useLocation();
   const location = window.location;
   const EmailStatus = {
     Verifying: "Verifying",

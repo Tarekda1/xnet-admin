@@ -1,11 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Link } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { accountService } from "@/services";
-import { Loading } from "@/components";
+import { Loading } from "../../../components";
 import { Segment, Table, Button, Icon, Confirm } from "semantic-ui-react";
-import { AddEdit } from "./AddEdit";
-import { useUsers } from "@/hooks";
+import AddEdit from "./AddEdit";
+import { useUsers } from "../../../hooks";
 import "./List.less";
 
 const UsersTableHeader = (props) => {
@@ -25,8 +22,7 @@ const UsersTableHeader = (props) => {
   );
 };
 
-function List({ match }) {
-  const { path } = match;
+function List() {
   const { users, loading, error, openDelete, deleteUser, fetchUserById } =
     useUsers();
   const isVisibleRef = useRef(true);
@@ -142,4 +138,4 @@ function List({ match }) {
   );
 }
 
-export { List };
+export default List;

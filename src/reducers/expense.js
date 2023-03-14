@@ -1,4 +1,4 @@
-import types from "@/actions/types.js";
+import types from "../actions/types.js";
 import { v4 as uuidv4 } from "uuid";
 
 // 1. Sets the initial state when the app loads

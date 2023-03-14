@@ -1,11 +1,9 @@
 import { BehaviorSubject } from "rxjs";
-import { fetchWrapper, history } from "@/helpers";
-import { getToken, clearToken } from "@/helpers";
+import { fetchWrapper, history } from "../helpers";
 import firebase from "../components/firebaseutility/firebase";
-import user from "../reducers/user";
+import constants from "../config/constants";
 const userSubject = new BehaviorSubject(null);
-const config = require("config");
-const baseUrl = `${config.apiUrl}/users`;
+const baseUrl = `${constants.API_URL}/users`;
 
 export const accountService = {
   login,
@@ -29,14 +27,6 @@ export const accountService = {
 };
 
 async function login(email, password) {
-  // return fetchWrapper
-  //   .post(`${baseUrl}/login`, { email, password })
-  //   .then((user) => {
-  //     //startRefreshTokenTimer();
-  //     console.log("user", user);
-  //     return user;
-  //   });
-
   const { user: resp } = await firebase
     .auth()
     .signInWithEmailAndPassword(email, password);

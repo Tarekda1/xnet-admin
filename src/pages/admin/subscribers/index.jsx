@@ -5,7 +5,7 @@ import React, {
   useRef,
   useMemo,
   useCallback,
-  memo
+  memo,
 } from "react";
 import { throttle, debounce } from "lodash";
 import { useDispatch, useSelector, shallowEqual } from "react-redux";
@@ -24,12 +24,12 @@ import {
 } from "semantic-ui-react";
 import styled from "styled-components";
 import { useHistory } from "react-router-dom";
-import { customerService } from "@/services";
-import { Loading } from "@/components";
-import { globalActions } from "@/actions/globalActions";
+import { customerService } from "../../../services";
+import { Loading } from "../../../components";
+import { globalActions } from "../../../actions/globalActions";
 import { AddEdit } from "./AddEdit";
-import "./dashboard.less";
-import types from "@/actions/types";
+import types from "../../../actions/types";
+import styles from "./dashboard.module.scss";
 
 const BorderLessSegment = styled(Segment)`
   border: none !important;
@@ -81,9 +81,9 @@ const ToolBar = memo(({ onSearchSubmit }) => {
   }, []);
   return (
     <Fragment>
-      <ZeroPaddingSegment className="toolbar">
+      <ZeroPaddingSegment className={styles.toolbar}>
         <ZeroPaddingSegment
-          className={`${"search__container"} ${"no__margin"}`}
+          className={`${styles.search__container} ${styles.no__margin}`}
         >
           <Input
             className="search__input"
@@ -92,14 +92,9 @@ const ToolBar = memo(({ onSearchSubmit }) => {
             onChange={debouncedChangeHandler}
           />
         </ZeroPaddingSegment>
-        <ZeroPaddingSegment>
-          <Button.Group>
-            <Button onClick={(e, data) => btnStatusHandler("all")} active={status == "all"}>All</Button>
-            <Button onClick={() => btnStatusHandler("paid")} active={status == "paid"}>Paid</Button>
-            <Button onClick={() => btnStatusHandler("not_paid")} active={status == "not_paid"}>Non Paid</Button>
-          </Button.Group>
-        </ZeroPaddingSegment>
-        <ZeroPaddingSegment className={`${"action__buttons"} ${"no__margin"}`}>
+        <ZeroPaddingSegment
+          className={`${styles.action__buttons} ${styles.no__margin}`}
+        >
           <Button
             className="btn basicStyle"
             icon
@@ -153,16 +148,20 @@ const Subscribers = ({ subscribers }) => {
     "Mobile",
     "Address",
     "Service",
-    "Expiry"
+    "Expiry",
   ];
   const nbofPaid = (subscribers) => {
-    console.log("updating")
-    return subscribers && subscribers.length && subscribers.reduce((acc, subs) => {
-      if (subs.subscribtionpaid === true) {
-        return acc + 1;
-      }
-      return acc;
-    }, 0);
+    console.log("updating");
+    return (
+      subscribers &&
+      subscribers.length &&
+      subscribers.reduce((acc, subs) => {
+        if (subs.subscribtionpaid === true) {
+          return acc + 1;
+        }
+        return acc;
+      }, 0)
+    );
   };
   return (
     <ZeroPaddingSegment>
@@ -173,11 +172,9 @@ const Subscribers = ({ subscribers }) => {
           <ZeroPaddingSegment>
             <ZeroPaddingSegment>
               <strong>Total: </strong>
-              {subscribers && subscribers.length}
-              {status == "all" && <strong> Total Paid: </strong>}
-              {status == "all" && nbofPaid(subscribers)}
+              {subscribers && subscribers.length > 0 ? subscribers.length : 0}
             </ZeroPaddingSegment>
-            <Table celled striped className="subsriber__table">
+            <Table celled striped className={styles.subsriber__table}>
               <Table.Header>
                 <Table.Row>
                   {tableHeader.map((header, i) => (
@@ -191,13 +188,15 @@ const Subscribers = ({ subscribers }) => {
                 </Table.Row>
               </Table.Header>
               <Table.Body>
-                {subscribers && subscribers.length && subscribers.map((subscriber, index) => (
-                  <CustomerRow
-                    key={subscriber.subscriberId}
-                    subscriber={subscriber}
-                    userInfo={userInfo}
-                  />
-                ))}
+                {subscribers &&
+                  subscribers.length &&
+                  subscribers.map((subscriber, index) => (
+                    <CustomerRow
+                      key={subscriber.subscriberId}
+                      subscriber={subscriber}
+                      userInfo={userInfo}
+                    />
+                  ))}
               </Table.Body>
             </Table>
           </ZeroPaddingSegment>
@@ -214,43 +213,40 @@ const CustomerRow = memo(({ subscriber, userInfo }) => {
   const dispatch = useDispatch();
   const postPaid = useCallback(async (subscriberId) => {
     try {
-      setSusbcriptionId(subscriberId)
+      setSusbcriptionId(subscriberId);
       setUpdating(true);
       const resp = await customerService.postPaid(subscriberId, {
         username: userInfo.username,
       });
       console.log(resp);
       if (resp && resp.code == 200) {
-        dispatch(globalActions.updateSubscriber(subscriberId, true))
+        dispatch(globalActions.updateSubscriber(subscriberId, true));
       }
     } catch (err) {
       console.log(err);
-    }
-    finally {
+    } finally {
       setUpdating(false);
-      setSusbcriptionId(-1)
+      setSusbcriptionId(-1);
     }
-
   }, []);
 
   const postUnPaid = useCallback(async (subscriberId) => {
-    console.log("calling unpaid function :)")
+    console.log("calling unpaid function :)");
     try {
-      setSusbcriptionId(subscriberId)
+      setSusbcriptionId(subscriberId);
       setUpdating(true);
       const resp = await customerService.postUnPaid(subscriberId, {
         username: userInfo.username,
       });
       console.log(resp);
       if (resp && resp.code == 200) {
-        dispatch(globalActions.updateSubscriber(subscriberId, false))
+        dispatch(globalActions.updateSubscriber(subscriberId, false));
       }
     } catch (err) {
-      console.log(err)
-    }
-    finally {
+      console.log(err);
+    } finally {
       setUpdating(false);
-      setSusbcriptionId(-1)
+      setSusbcriptionId(-1);
     }
   }, []);
   //  async (subscriberId) => {
@@ -270,16 +266,15 @@ const CustomerRow = memo(({ subscriber, userInfo }) => {
       {/* <Table.Cell>
         <Link to={`/customer/step2?customerid=${subscriber.id}`}>{subscriber.Notes}</Link>
       </Table.Cell> */}
-    </Table.Row >
+    </Table.Row>
   );
 });
 
 function index({ history }) {
   const userInfo = useSelector((state) => state.user.userInfo);
-  const subscribers = useSelector((state) => state.global.filteredSubscribers, [shallowEqual]);
+  const subscribers = useSelector((state) => state.global.filteredSubscribers);
   const dispatch = useDispatch();
   const isVisibleRef = useRef(false);
-
 
   useEffect(() => {
     isVisibleRef.current = true;
@@ -290,39 +285,46 @@ function index({ history }) {
     };
   }, [userInfo]);
 
-
-
   const onSearchSubmit = useCallback((text, status) => {
-    console.log("dispatch")
+    console.log("dispatch");
     dispatch(globalActions.shouldLoad(true));
     dispatch(globalActions.filterSusbcribers({ text, status }));
     dispatch(globalActions.shouldLoad(false));
   }, []);
 
   const onPaidStatusSubmit = useCallback((status) => {
-    console.log("dispatch")
+    console.log("dispatch");
     dispatch(globalActions.shouldLoad(true));
     dispatch(globalActions.filterPaidStatus({ value: status }));
     dispatch(globalActions.shouldLoad(false));
   }, []);
 
-
   return (
-    <BorderLessSegment className="no__padding" style={{ height: "100%" }}>
-      {!isMobile && (
-        <Segment className={`${"no__border"}`}>
-          <Header className="subtitle" as="h2">
-            Admin Dashboard
-          </Header>
-        </Segment>
-      )}
-      <BorderLessSegment className={`${"no__padding"}`}>
-        <>
-          <ToolBar onSearchSubmit={onSearchSubmit} onPaidStatusSearch={onPaidStatusSubmit} />
-          <Subscribers subscribers={subscribers} />
-        </>
-      </BorderLessSegment>
-    </BorderLessSegment>
+    <div className="p-4">
+      <div className="container">
+        <BorderLessSegment
+          className={styles.no__padding}
+          style={{ height: "100%" }}
+        >
+          {!isMobile && (
+            <Segment className={styles.no__border}>
+              <Header className="subtitle" as="h2">
+                Admin Dashboard
+              </Header>
+            </Segment>
+          )}
+          <BorderLessSegment className={styles.no__padding}>
+            <>
+              <ToolBar
+                onSearchSubmit={onSearchSubmit}
+                onPaidStatusSearch={onPaidStatusSubmit}
+              />
+              <Subscribers subscribers={subscribers} />
+            </>
+          </BorderLessSegment>
+        </BorderLessSegment>
+      </div>
+    </div>
   );
 }
 

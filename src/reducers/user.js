@@ -1,4 +1,4 @@
-import types from "@/actions/types.js";
+import types from "../actions/types.js";
 
 const initialState = {
   token: "",

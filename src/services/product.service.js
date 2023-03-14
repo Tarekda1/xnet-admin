@@ -1,9 +1,6 @@
-import { fetchWrapper, history } from "@/helpers";
-// const config = {
-// 	apiUrl: 'http://localhost:3000/api/v1'
-// };
-const config = require("config");
-const baseUrl = `${config.apiUrl}/product`;
+import { fetchWrapper } from "../helpers";
+import constants from "../config/constants";
+const baseUrl = `${constants.API_URL}/product`;
 
 export const productService = {
   getAll,

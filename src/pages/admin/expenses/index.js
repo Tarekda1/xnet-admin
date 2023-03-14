@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import { Route, Switch } from "react-router-dom";
 import { Segment, List } from "semantic-ui-react";
 import {
   AddExpenseForm,
@@ -7,10 +6,10 @@ import {
   ExpenseList,
   ExpenseTotal,
   RemainingBudget,
-} from "@/components";
-import expenseActions from "@/actions/expenseActions";
-import { UseExpenses } from "@/hooks";
-import { useDispatch, useSelector } from "react-redux";
+} from "../../../components";
+import expenseActions from "../../../actions/expenseActions";
+import { UseExpenses } from "../../../hooks";
+import { useDispatch } from "react-redux";
 
 const Expenses = ({ match }) => {
   const dispatch = useDispatch();

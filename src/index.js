@@ -1,12 +1,11 @@
 import React, { Suspense } from "react";
 import ReactDOM, { render } from "react-dom";
-import "@babel/polyfill";
+import "semantic-ui-css/semantic.min.css";
 import { App } from "./App";
-import i18n from "./Translation";
 
 ReactDOM.render(
   <Suspense fallback={null}>
-    <App trans={i18n} />
+    <App />
   </Suspense>,
   document.getElementById("root")
 );

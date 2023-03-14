@@ -1,4 +1,5 @@
-import { fetchWrapper, history } from "@/helpers";
+import { fetchWrapper } from "../helpers";
+import constants from "../config/constants";
 
 export const customerService = {
   getAllCustomers,
@@ -11,8 +12,7 @@ export const customerService = {
   createBatch,
 };
 
-const config = require("config");
-const baseUrl = `${config.apiUrl}/subscribers`;
+const baseUrl = `${constants.API_URL}/subscribers`;
 
 function getAllCustomers(offset = 0) {
   return fetchWrapper.get(`${baseUrl}/all?offset=${offset}`).then(

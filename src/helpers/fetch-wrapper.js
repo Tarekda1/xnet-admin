@@ -1,6 +1,6 @@
-import config from "config";
-import { accountService } from "@/services";
+import { accountService } from "../services";
 import { getToken } from "./utility";
+import constants from "../config/constants";
 
 export const fetchWrapper = {
   get,
@@ -80,7 +80,7 @@ function authHeader(url) {
   // return auth header with jwt if user is logged in and request is to the api url
   const token = getToken();
   //const isLoggedIn = user && user.jwtToken;
-  const isApiUrl = url.startsWith(config.apiUrl);
+  const isApiUrl = url.startsWith(constants.API_URL);
   if (token && isApiUrl) {
     return { Authorization: `Bearer ${token}` };
   } else {

@@ -1,5 +1,4 @@
 import readXlsxFile from "read-excel-file";
-import { userAccParser } from "@/helpers";
 
 export default class DataHelper {
   parseExcelFile = (filePath) => {

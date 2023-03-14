@@ -12,16 +12,13 @@ import {
   Icon,
   Checkbox,
 } from "semantic-ui-react";
-import { Subscriber, Loading } from "@/components";
-import { customerService } from "@/services";
+import { Subscriber, Loading } from "../../components";
 import styled from "styled-components";
 import _ from "lodash";
 import "./dashboard.less";
-import { globalActions } from "@/actions/globalActions";
-import { Role } from "@/helpers";
+import { globalActions } from "../../actions/globalActions";
+import { Role } from "../../helpers";
 import { debounce } from "lodash";
-import lodash from "lodash";
-import types from "@/actions/types";
 
 const BorderLessSegment = styled(Segment)`
   border: none !important;

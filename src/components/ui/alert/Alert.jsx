@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
-import { alertService, AlertType } from '@/services';
-import { history } from '@/helpers';
+import { alertService, AlertType } from '../../../services';
+import { history } from '../../../helpers';
 
 import './Alert.less';
 

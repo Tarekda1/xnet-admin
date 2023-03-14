@@ -1,9 +1,9 @@
 import types from "./types";
-import { ispService } from "@/services";
-import userActions from "@/actions/userActions";
-import { showNotification } from "@/helpers";
-import Pagged from "@/helpers/pagged-class";
-import { customerService, alertService } from "@/services";
+import { ispService } from "../services";
+import userActions from "../actions/userActions";
+import { showNotification } from "../helpers";
+import Pagged from "../helpers/pagged-class";
+import { customerService, alertService } from "../services";
 
 const globalActions = {
   changeLanguage: (data) => {

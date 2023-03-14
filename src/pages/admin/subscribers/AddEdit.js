@@ -1,8 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
-import { Formik, Field, Form, ErrorMessage } from "formik";
-import _, { get } from "lodash";
-import { useSelector, useDispatch } from "react-redux";
+import { Formik, Form, ErrorMessage } from "formik";
+import _ from "lodash";
+import { useDispatch } from "react-redux";
 import * as Yup from "yup";
 import {
   Modal,
@@ -10,23 +9,16 @@ import {
   Grid,
   Input,
   Segment,
-  Dropdown,
   Icon,
-  Message,
   Header,
   Checkbox,
 } from "semantic-ui-react";
-import { customerService, alertService } from "@/services";
-import { Loading } from "@/components/";
+import { customerService, alertService } from "../../../services";
+import { Loading } from "../../../components/";
+import { globalActions } from "../../../actions/globalActions";
 import "./add-edit.less";
-import { globalActions } from "@/actions/globalActions";
 
 function AddEdit({ history, match, open, Id, onSave, onClose }) {
-  const isVisible = useRef(false);
-  const [loading, setLoading] = useState(false);
-  const [subscriber, setSubscriber] = useState(initialState);
-  const dispatch = useDispatch();
-
   const initialState = {
     subscribername: "",
     subscribtionfees: 150000,
@@ -37,6 +29,11 @@ function AddEdit({ history, match, open, Id, onSave, onClose }) {
     paymentDate: "",
     subscribtionpaid: false,
   };
+
+  const isVisible = useRef(false);
+  const [loading, setLoading] = useState(false);
+  const [subscriber, setSubscriber] = useState(initialState);
+  const dispatch = useDispatch();
 
   const isAddMode = (id) => id === -1;
 

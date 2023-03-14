@@ -1,10 +1,7 @@
-import { BehaviorSubject } from "rxjs";
-import { fetchWrapper, history } from "@/helpers";
-import { getToken, clearToken } from "@/helpers";
-import { func } from "prop-types";
-const userSubject = new BehaviorSubject(null);
-const config = require("config");
-const baseUrl = `${config.apiUrl}/expenses`;
+import { fetchWrapper } from "../helpers";
+import constants from "../config/constants";
+
+const baseUrl = `${constants.API_URL}/expenses`;
 
 export const expenseService = {
   getAll,

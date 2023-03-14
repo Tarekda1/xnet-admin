@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Input, Button, Form, Container, Segment, Grid, Icon } from 'semantic-ui-react';
 import styled from 'styled-components';
-import { UseAddExpense } from "@/hooks";
-import { v4 as uuidv4 } from 'uuid';
+import { UseAddExpense } from "../../../hooks";
 import "./expenseform.less"
 
 const FullWidthButton = styled(Button)`

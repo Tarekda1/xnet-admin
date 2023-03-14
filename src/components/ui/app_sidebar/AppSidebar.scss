@@ -1,8 +1,8 @@
-@navbar-background-color: #fff;
-@sidebar-background-color: #fff;
-@sidebar-border: #1b30701c;
-@primary-color: #282262;
-@highlight-color: #1b306f47;
+$navbar-background-color: #fff;
+$sidebar-background-color: #fff;
+$sidebar-border: #1b30701c;
+$primary-color: #282262;
+$highlight-color: #1b306f47;
 
 
 .pushable {
@@ -54,7 +54,7 @@
 }
 
 .sidebar-wrapper {
-  background-color: @sidebar-background-color  !important;
+  background-color: $sidebar-background-color  !important;
   display: flex !important;
   width: 100px !important;
 }
@@ -65,7 +65,7 @@
 .ui.inverted.menu a.item:hover,
 .ui.link.inverted.menu .item:hover {
 
-  background-color: @highlight-color;
+  background-color: $highlight-color;
 
 }
 
@@ -74,13 +74,13 @@
 .ui.inverted.menu a.item:hover,
 .ui.link.inverted.menu .item:hover {
 
-  color: @primary-color;
+  color: $primary-color;
 
 }
 
 .sidebar-wrapper .sidebar-header {
   display: flex;
-  color: @primary-color;
+  color: $primary-color;
   align-items: center;
   padding: 1em 0;
   flex-direction: column;
@@ -91,25 +91,25 @@
 .sidebar-wrapper.ui.sidebar.menu .item {
   border-style: solid;
   border-width: 0.1px;
-  border-color: @sidebar-border;
+  border-color: $sidebar-border;
   display: flex;
   align-items: center;
   height: 90px;
   min-height: 90px;
   font-weight: 400;
-  color: @primary-color;
+  color: $primary-color;
 }
 
 .sidebar-wrapper.ui.inverted.menu .active.item::before {
   content: '';
   width: 5px;
   height: 100%;
-  color: @primary-color;
+  color: $primary-color;
 }
 
 .sidebar-wrapper.ui.sidebar.menu .item .icon {
   margin-right: 1em;
-  color: @primary-color;
+  color: $primary-color;
 }
 
 .portal {
@@ -132,6 +132,6 @@
   }
 
   a:hover {
-    color: @primary-color;
+    color: $primary-color;
   }
 }

@@ -1,7 +1,7 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { Button, List, Icon } from 'semantic-ui-react';
-import { UseDeleteExpense } from "@/hooks";
+import { UseDeleteExpense } from "../../..//hooks";
 import "./expenseform.less"
 
 function moneyFormatter(num) {

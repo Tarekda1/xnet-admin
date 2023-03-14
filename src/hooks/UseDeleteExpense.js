@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { expenseService } from "@/services";
+import { expenseService } from "../services";
 
 const UseDeleteExpense = () => {
   const [loading, setLoading] = useState(false);

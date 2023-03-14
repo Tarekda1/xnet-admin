@@ -11,9 +11,9 @@ import {
   Icon,
   Checkbox,
 } from "semantic-ui-react";
-import { globalActions } from "@/actions/globalActions";
+import { globalActions } from "../../../actions/globalActions";
 import { useDispatch, useSelector } from "react-redux";
-import { customerService } from "@/services";
+import { customerService } from "../../../services";
 
 const Subscriber = ({ subscriber }) => {
   const userInfo = useSelector((state) => state.user.userInfo);

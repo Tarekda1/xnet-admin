@@ -1,7 +1,7 @@
 import React from "react";
 import { Route, Switch, useRouteMatch } from "react-router-dom";
 
-import { Login } from "./Login";
+import Login from "./Login";
 import { Register } from "./Register";
 import { VerifyEmail } from "./VerifyEmail";
 import { ForgotPassword } from "./ForgotPassword";

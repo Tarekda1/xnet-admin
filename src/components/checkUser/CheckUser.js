@@ -2,8 +2,8 @@ import React, { useEffect, useState, Fragment } from "react";
 import { Route, Redirect } from "react-router-dom";
 import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { accountService } from "@/services";
-import userActions from "@/actions/userActions";
+import { accountService } from "../../services";
+import userActions from "../../actions/userActions";
 
 export const CheckUser = () => {
   const history = useHistory();

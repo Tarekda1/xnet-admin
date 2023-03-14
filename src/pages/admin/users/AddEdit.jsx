@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
-import { Formik, Field, Form, ErrorMessage } from "formik";
+import { Formik, Form, ErrorMessage } from "formik";
 import _, { get } from "lodash";
 import * as Yup from "yup";
 import {
@@ -11,11 +10,10 @@ import {
   Segment,
   Dropdown,
   Icon,
-  Message,
   Header,
 } from "semantic-ui-react";
-import { accountService, alertService } from "@/services";
-import { Loading } from "@/components/";
+import { accountService, alertService } from "../../../services";
+import { Loading } from "../../../components";
 import "./add-edit.less";
 
 function AddEdit({ history, match, open, Id, onSave, onClose }) {
@@ -336,4 +334,4 @@ function AddEdit({ history, match, open, Id, onSave, onClose }) {
   );
 }
 
-export { AddEdit };
+export default AddEdit;

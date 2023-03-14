@@ -16,14 +16,13 @@ import {
 } from "semantic-ui-react";
 import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
-import { globalActions } from "@/actions/globalActions";
-import { UploadFile } from "@/components/ui/upload_file/UploadFile";
-import DataHelper from "@/helpers/excel-helper";
-import { UploadedUsers } from "@/components";
-import { Loading } from "@/components";
-import { customerService } from "@/services";
-
-import "./importusers.less";
+import { globalActions } from "../../../actions/globalActions";
+import { UploadFile } from "../../../components/ui/upload_file/UploadFile";
+import DataHelper from "../../../helpers/excel-helper";
+import { UploadedUsers } from "../../../components";
+import { Loading } from "../../../components";
+import { customerService } from "../../../services";
+import "./importusers.scss";
 
 const BorderLessSegment = styled(Segment)`
   border: none !important;
@@ -165,26 +164,23 @@ const ImportUsers = () => {
               >
                 <Icon name="file excel" /> Import new file
               </Button>
-              <Button.Group className="actionsgroup">
-                <Dropdown
-                  className="button icon actionsgroup__dropdown"
-                  floating
-                  clearable
-                  ref={dropDownRef}
-                  disabled={selected.length == 0}
-                  onChange={(e, d) => {
-                    handleOnDropDownAction(e, d);
-                  }}
-                  options={Options}
-                  trigger={
-                    <Button
-                      content="Actions"
-                      disabled={selected.length == 0}
-                      className="actionsgroup__button"
-                    />
-                  }
-                />
-              </Button.Group>
+              <Dropdown
+                className="button icon actionsgroup__dropdown right floated basicStyle"
+                style={{ padding: "5px !important" }}
+                ref={dropDownRef}
+                disabled={selected.length == 0}
+                onChange={(e, d) => {
+                  handleOnDropDownAction(e, d);
+                }}
+                options={Options}
+                trigger={
+                  <Button
+                    content="Actions"
+                    disabled={selected.length == 0}
+                    className="actionsgroup__button"
+                  />
+                }
+              />
             </div>
           </Grid.Column>
         </Grid.Row>
@@ -223,4 +219,4 @@ const ImportUsers = () => {
   );
 };
 
-export { ImportUsers };
+export default ImportUsers;

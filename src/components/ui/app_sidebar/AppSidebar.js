@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useHistory, Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { getToken } from "@/helpers/utility";
+import { getToken } from "../../../helpers/utility";
 import { Icon, Menu, Sidebar, Image, Header } from "semantic-ui-react";
-import logo from "@/images/xnet_logo_main.png";
-import "./AppSidebar.less";
+import logo from "../../../images/xnet_logo_main.png";
+import "./AppSidebar.scss";
 function AppSidebar(props) {
   const language = "en";
   const user = useSelector((state) => state.user.userInfo);
@@ -49,7 +49,7 @@ function AppSidebar(props) {
             name="users"
             style={{ float: "left", margin: "0px 5px" }}
           />
-          <Link to="/admin">Subscribers</Link>
+          <Link to="/admin/subscribers">Subscribers</Link>
         </Menu.Item>
         <Menu.Item icon>
           <Icon

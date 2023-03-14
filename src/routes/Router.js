@@ -6,16 +6,24 @@ import {
   useHistory,
   useLocation,
 } from "react-router-dom";
-import { PrivateRoute, Alert } from "@/components";
-import { AppSidebar } from "@/components/ui/app_sidebar/AppSidebar";
-import { Dashboard } from "@/pages/dashboard";
-import { Account } from "@/pages/account";
-import { Admin } from "@/pages/admin";
-import { TopNavigation } from "@/components";
-import { CustomSwitch } from "@/components";
+import { PrivateRoute, Alert } from "../components";
+import { Dashboard } from "../pages/dashboard";
+import { CustomSwitch } from "../components";
+import Page from "../components/ui/page/page";
 import "react-notifications-component/dist/theme.css";
-import { Container } from "semantic-ui-react";
-import { NotFoundPage } from "./pages";
+import {
+  Subscribers,
+  NotFoundPage,
+  ImportUsers,
+  Expenses,
+  Login,
+  Register,
+  VerifyEmail,
+  ForgotPassword,
+  ResetPassword,
+  ListUsers,
+  AddEdit,
+} from "./pages";
 
 const withSuspense = (WrappedComponent) => {
   return (props) => {
@@ -56,26 +64,49 @@ const Router = ({ trans }) => {
   return (
     <React.StrictMode>
       <FirebaseProvider onRedirectCallback={onRedirectCb}>
-        <AppSidebar>
-          <Alert />
-          <TopNavigation i18n={trans} />
-          <Container fluid={true} className="resp__container">
-            <CustomSwitch>
-              <PrivateRoute exact path="/dashboard" comp={Dashboard} />
-              <Route path="/account">
-                <Account />
-              </Route>
-              <Route exact path={`${path}/`} component={Subscribers} />
-              <Route exact path={`${path}/users`} component={Users} />
-              <Route
-                exact
-                path={`${path}/importusers`}
-                component={ImportUsers}
-              />
-              <Route exact path={`${path}/expenses`} component={Expenses} />
-            </CustomSwitch>
-          </Container>
-        </AppSidebar>
+        <CustomSwitch>
+          <PrivateRoute exact path="/dashboard" comp={Dashboard} />
+          <Route exact path={`/account/login`} component={Login} />
+          <Route exact path={`/account/register`} component={Register} />
+          <Route exact path={`/account/verify-email`} component={VerifyEmail} />
+          <Route
+            exact
+            path={`/account/forgot-password`}
+            component={ForgotPassword}
+          />
+          <Route path={`/account/reset-password`} component={ResetPassword} />
+          <Route
+            exact
+            path="/admin/subscribers"
+            render={() => (
+              <Page>
+                <Subscribers />
+              </Page>
+            )}
+          />
+          <Route
+            exact
+            path="/admin/users"
+            render={() => (
+              <Page>
+                <ListUsers />
+              </Page>
+            )}
+          />
+          <Route
+            exact
+            path="/admin/importusers"
+            render={() => (
+              <Page>
+                <ImportUsers />
+              </Page>
+            )}
+          />
+          <Route exact path="/admin/expenses" component={Expenses} />
+          <Route exact path="/admin/users/add" component={AddEdit} />
+          <Route exact path="/admin/users/edit/:id" component={AddEdit} />
+          <Route path="*" component={NotFoundPage} />
+        </CustomSwitch>
       </FirebaseProvider>
     </React.StrictMode>
   );
