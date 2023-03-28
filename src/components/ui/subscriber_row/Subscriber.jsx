@@ -50,9 +50,6 @@ const Subscriber = ({ subscriber }) => {
       <Table.Cell>{subscriber.billDate}</Table.Cell>
       <Table.Cell>{subscriber.paymentDate}</Table.Cell>
       <Table.Cell style={{ width: "15%" }}>{subscriber.notes}</Table.Cell>
-      {/* <Table.Cell>
-					<Link to={`/customer/step2?customerid=${subscriber.id}`}>{subscriber.Notes}</Link>
-				</Table.Cell> */}
     </Table.Row>
   );
 };

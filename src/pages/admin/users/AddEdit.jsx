@@ -14,7 +14,7 @@ import {
 } from "semantic-ui-react";
 import { accountService, alertService } from "../../../services";
 import { Loading } from "../../../components";
-import "./add-edit.less";
+import "./add-edit.scss";
 
 function AddEdit({ history, match, open, Id, onSave, onClose }) {
   //const [ isAddMode, setIsAddMode ] = useState(true);

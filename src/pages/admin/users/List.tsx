@@ -3,9 +3,9 @@ import { Loading } from "../../../components";
 import { Segment, Table, Button, Icon, Confirm } from "semantic-ui-react";
 import AddEdit from "./AddEdit";
 import { useUsers } from "../../../hooks";
-import "./List.less";
+import "./List.scss";
 
-const UsersTableHeader = (props) => {
+const UsersTableHeader: React.FC<any> = (props) => {
   return (
     <Table.Header>
       <Table.Row>
@@ -22,7 +22,7 @@ const UsersTableHeader = (props) => {
   );
 };
 
-function List() {
+const List: React.FC = () => {
   const { users, loading, error, openDelete, deleteUser, fetchUserById } =
     useUsers();
   const isVisibleRef = useRef(true);
@@ -81,7 +81,7 @@ function List() {
                       <Button
                         onClick={() => {
                           setSelectedIdForDelete(user.email);
-                          setOpenDelete(true);
+                          //setOpenDelete(true);
                         }}
                         className="basicStyle users__row-delete"
                         icon
@@ -104,7 +104,7 @@ function List() {
             )}
             {!users && (
               <Table.Row>
-                <td colSpan="4" className="text-center">
+                <td colSpan={4} className="text-center">
                   <span className="spinner-border spinner-border-lg align-center" />
                 </td>
               </Table.Row>
@@ -117,7 +117,7 @@ function List() {
         onSave={() => {
           setshowModal(false);
           if (selectedUserId === -1) {
-            fetchUser();
+            //fetchUser();
           } else {
             //update user data
             fetchUserById(selectedUserId);
@@ -131,11 +131,13 @@ function List() {
       />
       <Confirm
         open={openDelete}
-        onCancel={() => setOpenDelete(false)}
+        onCancel={
+          () => {} //setOpenDelete(false)
+        }
         onConfirm={() => {}}
       />
     </Segment>
   );
-}
+};
 
 export default List;

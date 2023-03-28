@@ -1,17 +1,6 @@
 import { fetchWrapper } from "../helpers";
 import constants from "../config/constants";
 
-export const customerService = {
-  getAllCustomers,
-  getById,
-  create,
-  update,
-  search,
-  postPaid,
-  postUnPaid,
-  createBatch,
-};
-
 const baseUrl = `${constants.API_URL}/subscribers`;
 
 function getAllCustomers(offset = 0) {
@@ -60,3 +49,14 @@ function postUnPaid(subscriberId, body, useJson = true) {
 function createBatch(users, useJson = true) {
   return fetchWrapper.post(`${baseUrl}/batch`, users, useJson);
 }
+
+export const customerService = {
+  getAllCustomers,
+  getById,
+  create,
+  update,
+  search,
+  postPaid,
+  postUnPaid,
+  createBatch,
+};

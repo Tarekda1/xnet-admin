@@ -1,0 +1,58 @@
+/* Grid margin */
+.page__grid {
+  /*padding-top: 1rem !important;*/
+  overflow-x: hidden;
+  margin-top: 0rem !important;
+  background: transparent !important;
+  overflow-y: scroll;
+  margin-left: 0rem !important;
+  height: auto !important;
+}
+
+.dashboard__box {
+  width: 100%;
+  display: flex;
+  max-height: 120px;
+  min-height: 100px;
+  overflow-y: hidden;
+  border-radius: 0 i !important;
+  margin: 10px;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  -webkit-box-shadow: 0 10px 40px 0 rgba(62,57,107,.07), 0 2px 9px 0 rgba(62,57,107,.06); 
+  box-shadow: 0 10px 40px 0 rgba(62,57,107,.07), 0 2px 9px 0 rgba(62,57,107,.06);
+  &::first-line{
+    margin-left:0 ;
+  }
+}
+
+.red__box{
+ background:  red;
+ color:white;
+ font-size: 1rem;
+}
+
+.orange__box{
+  background: orange;
+  color:white;
+  font-size: 1rem;
+ }
+
+ .green__box{
+  background:green;
+  color:white;
+  font-size: 1rem;
+ }
+
+ .blue__box{
+  background:lightblue;
+  color:white;
+  font-size: 1rem;
+ }
+
+ .violet__box{
+  background:violet;
+  color:white;
+  font-size: 1rem;
+ }

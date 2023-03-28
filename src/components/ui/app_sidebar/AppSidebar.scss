@@ -19,29 +19,6 @@ $highlight-color: #1b306f47;
   transition: all .5s ease;
 }
 
-// .ui.visible.left.sidebar~.fixed,
-// .ui.visible.left.sidebar~.pusher {
-//   transform: translate3d(0, 0, 0) !important;
-//   -webkit-transform: translate3d(0, 0, 0) !important;
-//   margin-left: 260px !important;
-// }
-
-// .ui.collapsed.left.sidebar~.fixed,
-// .ui.collapsed.left.sidebar~.pusher {
-//   transform: translate3d(0, 0, 0) !important;
-//   -webkit-transform: translate3d(0, 0, 0) !important;
-//   margin-left: 80px !important;
-// }
-
-.ui.left.sidebar {
-  width: 260px;
-  transition: all 0.5s ease;
-}
-
-.ui.collapsed.visible.left.sidebar {
-  width: 80px;
-}
-
 .sidebar__logo {
   display: flex;
   justify-content: center;
@@ -58,6 +35,30 @@ $highlight-color: #1b306f47;
   display: flex !important;
   width: 100px !important;
 }
+
+.ui.collapsed.visible.left.sidebar {
+  width: 80px;
+}
+
+.ui.left.sidebar {
+  width: 82px !important;
+  transform: translate3d(0, 0, 0);
+  visibility: visible;
+  transition: all 0.5s ease;
+  position: relative !important;
+}
+
+.ui.visible.sidebar {
+  visibility: visible;
+  width: 200px !important;
+  transform: translate3d(0,0,0); 
+}
+
+.ui.visible.thin.left.sidebar~.fixed, .ui.visible.thin.left.sidebar~.pusher{
+  transform: translate3d(0,0,0); 
+}
+
+
 
 /* Hover override*/
 .ui.inverted.menu .dropdown.item:hover,
@@ -107,9 +108,46 @@ $highlight-color: #1b306f47;
   color: $primary-color;
 }
 
+.thin.sidebar.menu {
+  transition: all .3s ease;
+  div.icon{
+    a {
+      display: none;
+    }
+  }
+}
+
+.thin.ui.visible.sidebar.menu {
+  transition: all .6s ease;
+  div.icon{
+    a {
+      display: block;
+    }
+  }
+}
+
+.ui.vertical.menu .item {
+  display: flex;
+  min-height: 48px;
+  justify-content: center;
+  align-items: center;
+  background: 0 0;
+  border-top: none;
+  border-right: none;
+}
+
+.ui.visible.vertical.menu .item {
+  justify-content: flex-start;
+}
+
+
 .sidebar-wrapper.ui.sidebar.menu .item .icon {
   margin-right: 1em;
   color: $primary-color;
+}
+
+.ui.vertical.menu .active.item{
+  border-left: 3px solid red;
 }
 
 .portal {

@@ -43,4 +43,10 @@ export const ListUsers = withSuspense(
   lazy(() => import("../pages/admin/users/List"))
 );
 
+export const Plans = withSuspense(
+  lazy(() => import("../pages/billing/plans/plans"))
+);
+
+export const Dashboard = withSuspense(lazy(() => import("../pages/dashboard")));
+
 export const Users = withSuspense(lazy(() => import("../pages/admin/users")));

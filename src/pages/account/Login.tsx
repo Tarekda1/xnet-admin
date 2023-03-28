@@ -15,15 +15,16 @@ import { useTranslation } from "react-i18next";
 import { accountService, alertService } from "../../services";
 import firebase from "../../components/firebaseutility/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
-import logo from "../../images/xnet_logo_main.png";
+import routes from "routes/routes";
+import logo from "images/xnet_logo_main.png";
 import { Role } from "../../helpers/Role";
 
 function Login({ history, location }) {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const [user, loading, error] = useAuthState(firebase.auth());
-  const token = useSelector((state) => state.user.token);
-  const userInfo = useSelector((state) => state.user.userInfo);
+  const token = useSelector((state: any) => state.user.token);
+  const userInfo = useSelector((state: any) => state.user.userInfo);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [progress, setProgress] = useState(false);
@@ -42,7 +43,7 @@ function Login({ history, location }) {
       console.log("role constant", Role.Admin);
       if (userInfo.role == Role.Admin) {
         console.log("/admin");
-        history.push({ pathname: "/admin/subscribers" });
+        history.push({ pathname: routes.index });
       } else {
         const { from } = location.state || { from: { pathname: "/" } };
         history.push(from);

@@ -47,11 +47,6 @@ const TopNavigation = () => {
 
   let dropdown = [
     {
-      key: "username",
-      text: user && user.firstName,
-      value: "username",
-    },
-    {
       key: "Logout",
       text: "Logout",
       value: "logout",
@@ -74,8 +69,7 @@ const TopNavigation = () => {
   function onDropdownSelection(element, data) {
     if (data.value === "logout") {
       dispatch(userActions.performLogout());
-      history.push("/");
-      window.location.reload();
+      history.push("/account/login");
     }
   }
 
@@ -108,14 +102,15 @@ const TopNavigation = () => {
         </Button>
       </BorderLessSegment>
       <Grid.Column className={styles.squeez} floated="right">
-        {/* <BorderLessSegment>
-          <h4 style={{ margin: 0, paddingRight: "10px" }}>
-            Welcome {user.username}
+        <BorderLessSegment>
+          <h4 style={{ margin: 0, paddingRight: "10px", fontWeight: "normal" }}>
+            Logged in as:{" "}
+            <span style={{ fontWeight: "bold" }}>{user.username}</span>
           </h4>
-        </BorderLessSegment> */}
+        </BorderLessSegment>
         <BorderLessSegment>
           <h4 style={{ margin: 0, paddingRight: "10px" }}>
-            {moment(new Date()).format("dd-mm-yyyy")}
+            {moment(new Date()).format("DD-MM-YYYY")}
           </h4>
         </BorderLessSegment>
         <Menu floated="right" compact>

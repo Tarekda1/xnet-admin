@@ -6,11 +6,8 @@ import {
   useHistory,
   useLocation,
 } from "react-router-dom";
-import { PrivateRoute, Alert } from "../components";
-import { Dashboard } from "../pages/dashboard";
-import { CustomSwitch } from "../components";
-import Page from "../components/ui/page/page";
-import "react-notifications-component/dist/theme.css";
+import { PrivateRoute, CustomSwitch } from "components";
+import Page from "components/ui/page/page";
 import {
   Subscribers,
   NotFoundPage,
@@ -23,7 +20,11 @@ import {
   ResetPassword,
   ListUsers,
   AddEdit,
+  Dashboard,
+  Plans,
 } from "./pages";
+import routes from "./routes";
+import "react-notifications-component/dist/theme.css";
 
 const withSuspense = (WrappedComponent) => {
   return (props) => {
@@ -39,7 +40,7 @@ export const FirebaseProvider = withSuspense(
   lazy(() => import("../components/FirebaseAuth/FirebaseAuthProvider"))
 );
 
-const Router = ({ trans }) => {
+const Router: React.FC = () => {
   const location = useLocation();
   const history = useHistory();
 
@@ -65,46 +66,75 @@ const Router = ({ trans }) => {
     <React.StrictMode>
       <FirebaseProvider onRedirectCallback={onRedirectCb}>
         <CustomSwitch>
-          <PrivateRoute exact path="/dashboard" comp={Dashboard} />
-          <Route exact path={`/account/login`} component={Login} />
-          <Route exact path={`/account/register`} component={Register} />
-          <Route exact path={`/account/verify-email`} component={VerifyEmail} />
-          <Route
+          <PrivateRoute
             exact
-            path={`/account/forgot-password`}
+            path={routes.index}
+            render={() => (
+              <Page>
+                <Dashboard />
+              </Page>
+            )}
+          />
+          <Route exact path={routes.login} component={Login} />
+          <Route exact path={routes.register} component={Register} />
+          <Route exact path={routes.verifyEmail} component={VerifyEmail} />
+          <PrivateRoute
+            exact
+            path={routes.forgotPassword}
             component={ForgotPassword}
           />
-          <Route path={`/account/reset-password`} component={ResetPassword} />
-          <Route
+          <PrivateRoute path={routes.resetPassword} component={ResetPassword} />
+          <PrivateRoute
             exact
-            path="/admin/subscribers"
+            path={routes.subsribers}
             render={() => (
               <Page>
                 <Subscribers />
               </Page>
             )}
           />
-          <Route
+          <PrivateRoute
             exact
-            path="/admin/users"
+            path={routes.users}
             render={() => (
               <Page>
                 <ListUsers />
               </Page>
             )}
           />
-          <Route
+          <PrivateRoute
             exact
-            path="/admin/importusers"
+            path={routes.importUsers}
             render={() => (
               <Page>
                 <ImportUsers />
               </Page>
             )}
           />
-          <Route exact path="/admin/expenses" component={Expenses} />
-          <Route exact path="/admin/users/add" component={AddEdit} />
-          <Route exact path="/admin/users/edit/:id" component={AddEdit} />
+          <Route
+            exact
+            path={routes.expenses}
+            render={() => (
+              <Page>
+                <Expenses />
+              </Page>
+            )}
+          />
+          <Route exact path={routes.addEditUsers} component={AddEdit} />
+          <Route
+            exact
+            path={`${routes.addEditUsers}/:id`}
+            component={AddEdit}
+          />
+          <Route
+            exact
+            path={routes.plans}
+            render={() => (
+              <Page>
+                <Plans />
+              </Page>
+            )}
+          />
           <Route path="*" component={NotFoundPage} />
         </CustomSwitch>
       </FirebaseProvider>

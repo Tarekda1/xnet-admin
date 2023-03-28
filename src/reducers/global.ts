@@ -1,6 +1,24 @@
 import types from "../actions/types";
 
-const initialState = {
+interface global {
+  language?: string;
+  showLoading?: Boolean;
+  languages?: [];
+  showSearching?: Boolean;
+  subscribers?: [];
+  appliedFilters?: [];
+  filteredSubscribers?: [Subsriber];
+  status?: string;
+  showMenu?: Boolean;
+  loaded: Boolean;
+}
+
+interface Subsriber {
+  subscribername?: string;
+  username?: string;
+}
+
+const initialState: global = {
   language: "en",
   showLoading: false,
   languages: [],
@@ -8,7 +26,7 @@ const initialState = {
   subscribers: [],
   appliedFilters: [],
   status: "all",
-  showMenu: false,
+  showMenu: true,
   loaded: false,
 };
 
@@ -25,7 +43,7 @@ function removeFilter(filter, appliedFilters) {
   return appliedFilters;
 }
 
-export default (state = initialState, action) => {
+export default (state: global = initialState, action) => {
   const { type, payload } = action;
 
   switch (type) {
@@ -51,27 +69,20 @@ export default (state = initialState, action) => {
       return { ...state, status: payload };
     case types.UPDATE_SUBSCRIBER:
       console.log(payload);
-      let myState = Object.assign({}, state);
+      let myState: global = Object.assign({}, state);
       let index = myState.filteredSubscribers.findIndex(
         (s) => s.username == payload.username
       );
       console.log(index);
       myState.filteredSubscribers[index] = payload;
-      if (status == "not_paid") {
-        filteredValues = filteredValues.filter(
-          (s) => s.subscribtionpaid == false
-        );
-        newState.filteredSubscribers = filteredValues;
-      }
+
       return myState;
     case types.FILTER_SUBSCRIBERS:
       console.log("hello");
       let newState = Object.assign({}, state);
       //the value received from our presentational component
       let { text, status } = payload;
-      console.log(text);
-      console.log(status);
-      let filteredValues = newState.subscribers;
+      let filteredValues: any = newState.subscribers;
       if (text != "") {
         filteredValues = filteredValues.filter((subscriber) => {
           //look for objects with the received value in their ‘name’ or ‘designer’ fields

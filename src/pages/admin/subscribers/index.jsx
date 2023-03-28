@@ -7,21 +7,9 @@ import React, {
   useCallback,
   memo,
 } from "react";
-import { throttle, debounce } from "lodash";
+import { debounce } from "lodash";
 import { useDispatch, useSelector, shallowEqual } from "react-redux";
-import { isMobile } from "react-device-detect";
-import {
-  Grid,
-  Segment,
-  Container,
-  Header,
-  List,
-  Input,
-  Button,
-  Table,
-  Icon,
-  Checkbox,
-} from "semantic-ui-react";
+import { Segment, Input, Button, Table, Icon } from "semantic-ui-react";
 import styled from "styled-components";
 import { useHistory } from "react-router-dom";
 import { customerService } from "../../../services";
@@ -118,12 +106,12 @@ const ToolBar = memo(({ onSearchSubmit }) => {
             Id={selectedSubscriber}
             onSave={() => {
               setshowModal(false);
-              if (selectedSubscriber === -1) {
-                fetchUser();
-              } else {
-                //update user data
-                fetchUserById(selectedSubscriber);
-              }
+              // if (selectedSubscriber === -1) {
+              //   fetchUser();
+              // } else {
+              //   //update user data
+              //   fetchUserById(selectedSubscriber);
+              // }
             }}
             open={showModal}
             onClose={() => {
@@ -302,26 +290,14 @@ function index({ history }) {
   return (
     <div className="p-4">
       <div className="container">
-        <BorderLessSegment
-          className={styles.no__padding}
-          style={{ height: "100%" }}
-        >
-          {!isMobile && (
-            <Segment className={styles.no__border}>
-              <Header className="subtitle" as="h2">
-                Admin Dashboard
-              </Header>
-            </Segment>
-          )}
-          <BorderLessSegment className={styles.no__padding}>
-            <>
-              <ToolBar
-                onSearchSubmit={onSearchSubmit}
-                onPaidStatusSearch={onPaidStatusSubmit}
-              />
-              <Subscribers subscribers={subscribers} />
-            </>
-          </BorderLessSegment>
+        <BorderLessSegment className={styles.no__padding}>
+          <>
+            <ToolBar
+              onSearchSubmit={onSearchSubmit}
+              onPaidStatusSearch={onPaidStatusSubmit}
+            />
+            <Subscribers subscribers={subscribers} />
+          </>
         </BorderLessSegment>
       </div>
     </div>

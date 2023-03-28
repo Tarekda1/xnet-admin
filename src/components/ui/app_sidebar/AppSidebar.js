@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useHistory, Link } from "react-router-dom";
+import { useHistory, Link, useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { getToken } from "../../../helpers/utility";
 import { Icon, Menu, Sidebar, Image, Header } from "semantic-ui-react";
@@ -9,8 +9,9 @@ function AppSidebar(props) {
   const language = "en";
   const user = useSelector((state) => state.user.userInfo);
   const visible = useSelector((state) => state.global.showMenu);
-
+  const location = useLocation();
   const token = getToken();
+  console.log(location.pathname);
 
   return token ? (
     <Sidebar.Pushable>
@@ -31,11 +32,25 @@ function AppSidebar(props) {
                 alt={user.username}
               />
             ) : (
-              <Image width="100px" src={logo} alt="eaga card" />
+              <Image width="100px" src={logo} alt="Xnet Billing Portal" />
             )}
           </Link>
         </Menu.Item>
-        <Menu.Item icon>
+        <Menu.Item
+          icon
+          className={location.pathname == "/dashboard" ? "active" : ""}
+        >
+          <Icon
+            floated="left"
+            name="dashboard"
+            style={{ float: "left", margin: "0px 5px" }}
+          />
+          <Link to="/dashboard">Dashboard</Link>
+        </Menu.Item>
+        <Menu.Item
+          icon
+          className={location.pathname == "/admin/users" ? "active" : ""}
+        >
           <Icon
             floated="left"
             name="users"
@@ -43,7 +58,10 @@ function AppSidebar(props) {
           />
           <Link to="/admin/users">Users</Link>
         </Menu.Item>
-        <Menu.Item icon>
+        <Menu.Item
+          icon
+          className={location.pathname == "/admin/subscribers" ? "active" : ""}
+        >
           <Icon
             floated="left"
             name="users"
@@ -51,15 +69,21 @@ function AppSidebar(props) {
           />
           <Link to="/admin/subscribers">Subscribers</Link>
         </Menu.Item>
-        <Menu.Item icon>
+        <Menu.Item
+          icon
+          className={location.pathname == "/billing/plans" ? "active" : ""}
+        >
           <Icon
             floated="left"
-            name="money"
+            name="plan"
             style={{ float: "left", margin: "0px 5px" }}
           />
-          <Link to="/admin/plans">Plans</Link>
+          <Link to="/billing/plans">Plans</Link>
         </Menu.Item>
-        <Menu.Item icon>
+        <Menu.Item
+          icon
+          className={location.pathname == "/admin/expenses" ? "active" : ""}
+        >
           <Icon
             floated="left"
             name="money"

@@ -1,0 +1,18 @@
+.form-group__col {
+    display: flex;
+    flex-direction: column;
+    margin: 15px 0px 15px 0px;
+  }
+  .form-group__col label {
+    padding-bottom: 7px;
+    font-weight: bold;
+    text-transform: capitalize;
+    font-size: 12px;
+  }
+  
+  .model-actions{
+     border: none !important;
+     box-shadow: none !important;
+     margin:0 !important;
+  }
+  
