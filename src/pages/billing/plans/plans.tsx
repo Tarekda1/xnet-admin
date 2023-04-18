@@ -56,9 +56,10 @@ const FlexColumn = styled(ZeroPaddingSegment)`
 interface IPlanProps {
   plan: Plan;
   onDelete: (id) => void;
+  onEdit: (id) => void;
 }
 
-const PlanRow: React.FC<IPlanProps> = memo(({ plan, onDelete }) => {
+const PlanRow: React.FC<IPlanProps> = memo(({ plan, onDelete, onEdit }) => {
   return (
     <Table.Row key={plan.planId}>
       <Table.Cell>{plan.name}</Table.Cell>
@@ -66,108 +67,107 @@ const PlanRow: React.FC<IPlanProps> = memo(({ plan, onDelete }) => {
       <Table.Cell>{plan.price}</Table.Cell>
       <Table.Cell>{plan.description}</Table.Cell>
       <Table.Cell>
-        <Button onClick={onDelete}>Delete plan</Button>
+        <Button onClick={onDelete}>Delete</Button>
+        <Button onClick={onEdit}>Edit</Button>
       </Table.Cell>
     </Table.Row>
   );
 });
 
-const ToolBar: React.FC<any> = memo(({ onSearchSubmit }) => {
-  const [text, settext] = useState("");
-  const dispatch = useDispatch();
-  const status = useSelector((state: any) => state?.global?.status);
-  const history = useHistory();
-  const [selectedSubscriber, setselectedSubscriber] = useState(-1);
-  const [showModal, setshowModal] = useState(false);
-  const changeHandler = (e, data) => {
-    console.log(data.value);
-    settext(data.value);
-    if (data.value) {
-      onSearchSubmit(data.value, status);
-    } else {
-      //load all data
-      onSearchSubmit("", status);
-    }
-  };
-  const btnStatusHandler = (statusData) => {
-    console.log(`status: ${statusData}`);
-    //setStatus(statusData)
-    dispatch({ type: types.CHANGE_FILTER_STATUS, payload: statusData });
-    onSearchSubmit(text, statusData);
-  };
-  const debouncedChangeHandler = useMemo(
-    () => debounce(changeHandler, 500),
-    [text]
-  );
-  useEffect(() => {
-    return () => {
-      debouncedChangeHandler.cancel();
+const ToolBar: React.FC<any> = memo(
+  ({ onSearchSubmit, onSaveHandler, onAdd }) => {
+    const [text, settext] = useState("");
+    const dispatch = useDispatch();
+    const status = useSelector((state: any) => state?.global?.status);
+    const history = useHistory();
+    const changeHandler = (e, data) => {
+      console.log(data.value);
+      settext(data.value);
+      if (data.value) {
+        onSearchSubmit(data.value, status);
+      } else {
+        //load all data
+        onSearchSubmit("", status);
+      }
     };
-  }, []);
-  return (
-    <Fragment>
-      <ZeroPaddingSegment className="toolbar">
-        <ZeroPaddingSegment className={`search__container no__margin`}>
-          <Input
-            className="search__input"
-            icon="search"
-            placeholder="Search Client/Details"
-            onChange={debouncedChangeHandler}
-          />
+    const btnStatusHandler = (statusData) => {
+      console.log(`status: ${statusData}`);
+      //setStatus(statusData)
+      dispatch({ type: types.CHANGE_FILTER_STATUS, payload: statusData });
+      onSearchSubmit(text, statusData);
+    };
+    const debouncedChangeHandler = useMemo(
+      () => debounce(changeHandler, 500),
+      [text]
+    );
+    useEffect(() => {
+      return () => {
+        debouncedChangeHandler.cancel();
+      };
+    }, []);
+    return (
+      <Fragment>
+        <ZeroPaddingSegment className="toolbar">
+          <ZeroPaddingSegment className={`search__container no__margin`}>
+            <Input
+              className="search__input"
+              icon="search"
+              placeholder="Search Client/Details"
+              onChange={debouncedChangeHandler}
+            />
+          </ZeroPaddingSegment>
+          <ZeroPaddingSegment className={`action__buttons no__margin`}>
+            <Button className="btn basicStyle" icon onClick={onAdd}>
+              <Icon name="plus" />
+              Add Plan
+            </Button>
+          </ZeroPaddingSegment>
         </ZeroPaddingSegment>
-        <ZeroPaddingSegment className={`action__buttons no__margin`}>
-          <Button
-            className="btn basicStyle"
-            icon
-            onClick={(e) => {
-              setselectedSubscriber((prev) => -1);
-              setshowModal(true);
-            }}
-          >
-            <Icon name="plus" />
-            Add Plan
-          </Button>
-          <AddEdit
-            Id={selectedSubscriber}
-            onSave={() => {
-              setshowModal(false);
-              // if (selectedSubscriber === -1) {
-              //   fetchUser();
-              // } else {
-              //   //update user data
-              //   fetchUserById(selectedSubscriber);
-              // }
-            }}
-            open={showModal}
-            onClose={() => {
-              setselectedSubscriber(-1);
-              setshowModal(false);
-            }}
-          />
-        </ZeroPaddingSegment>
-      </ZeroPaddingSegment>
-      <div style={{ clear: "both" }} />
-    </Fragment>
-  );
-});
+        <div style={{ clear: "both" }} />
+      </Fragment>
+    );
+  }
+);
 
 const index: React.FC = (props) => {
-  const [getPlans, getPlansState] = useFetch<{}, Response>();
+  const [getPlans] = useFetch<{}, Response>();
+  const [plans, setPlans] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [refreshLoading, setRefreshLoading] = useState(false);
   const [deletePlans] = useFetch<{}, Response>();
+  const [selectedSubscriber, setselectedSubscriber] = useState("");
+  const [showModal, setshowModal] = useState(false);
   const tableHeader = ["Name", "Speed", "Price", "Description"];
 
-  useEffect(() => {
-    const controller = new AbortController();
-    const signal = controller.signal;
-    getPlans({
+  async function getPlansAsync(signal, setloadingCb) {
+    setloadingCb(true);
+    const plans = await getPlans({
       headers: { method: "GET" },
       url: `${constants.API_URL}/billing/plans/all`,
       signal: signal,
     });
+    setPlans(plans);
+    setloadingCb(false);
+  }
+
+  useEffect(() => {
+    const controller = new AbortController();
+    const signal = controller.signal;
+    getPlansAsync(signal, setLoading);
     return () => {
       signal.aborted;
     };
   }, []);
+
+  useEffect(() => {
+    if (showModal === true) return;
+    const controller = new AbortController();
+    const signal = controller.signal;
+    getPlansAsync(signal, setRefreshLoading);
+    return () => {
+      signal.aborted;
+    };
+  }, [showModal]);
 
   const deletePlanCb = useCallback(async (id: string) => {
     await deletePlans({
@@ -176,9 +176,15 @@ const index: React.FC = (props) => {
     });
   }, []);
 
+  const editPlanCb = useCallback(async (id: string) => {
+    console.log(`plan id: ${id}`);
+    setselectedSubscriber(id);
+    setshowModal(true);
+  }, []);
+
   return (
     <div>
-      {getPlansState.loading ? (
+      {loading ? (
         <Loading />
       ) : (
         <ZeroPaddingSegment>
@@ -187,11 +193,15 @@ const index: React.FC = (props) => {
           </Header>
           <ZeroPaddingSegment>
             <strong>Total: </strong>
-            {getPlansState?.data && getPlansState?.data?.length > 0
-              ? getPlansState?.data.length
-              : 0}
+            {plans && plans?.length > 0 ? plans?.length : 0}
           </ZeroPaddingSegment>
-          <ToolBar />
+          <ToolBar
+            onSaveHandler={getPlans}
+            onAdd={(e) => {
+              setselectedSubscriber("");
+              setshowModal(true);
+            }}
+          />
           <Table celled striped className="plans__table ui celled table">
             <Table.Header>
               <Table.Row>
@@ -201,20 +211,42 @@ const index: React.FC = (props) => {
               </Table.Row>
             </Table.Header>
             <Table.Body>
-              {getPlansState &&
-                getPlansState?.data?.length &&
-                getPlansState?.data.map((plan, index) => (
+              {plans &&
+                plans?.length &&
+                plans?.map((plan, index) => (
                   <PlanRow
                     plan={plan}
-                    key={plan.planId}
+                    key={`id__${plan.planId}`}
                     onDelete={() => {
                       //post to delete
                       deletePlanCb(plan.planId);
+                    }}
+                    onEdit={() => {
+                      console.log(`planId: ${plan.planId}`);
+                      editPlanCb(plan.planId);
                     }}
                   />
                 ))}
             </Table.Body>
           </Table>
+          <AddEdit
+            Id={selectedSubscriber}
+            onSave={() => {
+              setshowModal(false);
+              //update the model
+              // if (selectedSubscriber === -1) {
+              //   onSaveHandler();
+              // } else {
+              //   //update user data
+              //   onSaveHandler(selectedSubscriber);
+              // }
+            }}
+            open={showModal}
+            onClose={() => {
+              setselectedSubscriber("");
+              setshowModal(false);
+            }}
+          />
         </ZeroPaddingSegment>
       )}
     </div>

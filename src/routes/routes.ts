@@ -11,4 +11,5 @@ export default {
   expenses: "/admin/expenses",
   addEditUsers: "/admin/users/add",
   plans: "/billing/plans",
+  invoices: "/billing/invoices",
 };

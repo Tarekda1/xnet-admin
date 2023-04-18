@@ -22,13 +22,21 @@ import { Role } from "../../helpers/Role";
 function Login({ history, location }) {
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const [user, loading, error] = useAuthState(firebase.auth());
   const token = useSelector((state: any) => state.user.token);
   const userInfo = useSelector((state: any) => state.user.userInfo);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [progress, setProgress] = useState(false);
   const isVisible = useRef(true);
+
+  async function getCurrentUser(auth) {
+    return new Promise((resolve, reject) => {
+      const unsubscribe = auth.onAuthStateChanged((user) => {
+        unsubscribe();
+        resolve(user);
+      }, reject);
+    });
+  }
 
   const validationSchema = Yup.object().shape({
     username: Yup.string().required("Username is required"),
@@ -37,20 +45,22 @@ function Login({ history, location }) {
 
   useEffect(() => {
     // token && sessionStorage.getItem("token")
-    console.log(`user inside login: ${user}`);
-    if (user !== null && userInfo.role !== undefined) {
-      console.log("role", userInfo.role);
-      console.log("role constant", Role.Admin);
-      if (userInfo.role == Role.Admin) {
-        console.log("/admin");
-        history.push({ pathname: routes.index });
+    getCurrentUser(firebase.auth()).then((user) => {
+      console.log(`user inside login: ${user}`);
+      if (user !== null && userInfo.role !== undefined) {
+        console.log("role", userInfo.role);
+        console.log("role constant", Role.Admin);
+        if (userInfo.role == Role.Admin) {
+          console.log("/admin");
+          history.push({ pathname: routes.index });
+        } else {
+          const { from } = location.state || { from: { pathname: "/" } };
+          history.push(from);
+        }
       } else {
-        const { from } = location.state || { from: { pathname: "/" } };
-        history.push(from);
+        dispatch(userActions.performLogout());
       }
-    } else {
-      dispatch(userActions.performLogout());
-    }
+    });
   }, [token, dispatch]);
 
   function onSubmit() {

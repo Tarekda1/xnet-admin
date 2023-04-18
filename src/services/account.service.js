@@ -30,10 +30,7 @@ async function login(email, password) {
   const { user: resp } = await firebase
     .auth()
     .signInWithEmailAndPassword(email, password);
-  // const token = await resp.getIdToken();
-  // const userData = await fetchWrapper.get(`${baseUrl}/data/${email}`);
-  // return { ...user, token, username: userData.username, role: userData.role };
-
+  console.log(`resp from firebase: ${resp}`);
   const user = await fetchWrapper.post(`${baseUrl}/login`, { email, password });
   return user;
 }

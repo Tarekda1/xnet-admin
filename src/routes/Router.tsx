@@ -22,6 +22,7 @@ import {
   AddEdit,
   Dashboard,
   Plans,
+  Invoices,
 } from "./pages";
 import routes from "./routes";
 import "react-notifications-component/dist/theme.css";
@@ -132,6 +133,15 @@ const Router: React.FC = () => {
             render={() => (
               <Page>
                 <Plans />
+              </Page>
+            )}
+          />
+          <Route
+            exact
+            path={routes.invoices}
+            render={() => (
+              <Page>
+                <Invoices />
               </Page>
             )}
           />

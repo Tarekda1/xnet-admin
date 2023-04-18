@@ -12,7 +12,7 @@ import {
   Header,
 } from "semantic-ui-react";
 import useFetch from "hooks/UseFetch";
-import { customerService, alertService } from "services";
+import { billingService, alertService } from "services";
 import constants from "config/constants";
 import { Loading } from "components/";
 import "./add-edit.scss";
@@ -32,15 +32,20 @@ function AddEdit({ open, Id, onSave, onClose }) {
 
   const [addPlan, addPlanState] = useFetch<{}, Response>();
 
-  const isAddMode = (id) => id === -1;
+  const isAddMode = (id) => id === "";
 
   useEffect(() => {
     //setId(Id);
-    if (Id === -1) {
+    if (Id === "") {
       setPlan(initialState);
     }
     return () => {};
   }, [open]);
+
+  useEffect(() => {
+    console.log(JSON.stringify(plan));
+    return () => {};
+  }, [plan]);
 
   const validationSchema = Yup.object().shape({
     name: Yup.string().required("susbcribername is required"),
@@ -51,7 +56,7 @@ function AddEdit({ open, Id, onSave, onClose }) {
 
   function onSubmit(fields, { setStatus, setSubmitting }) {
     setStatus();
-    if (Id === -1) {
+    if (Id === "") {
       createPlan(fields, setSubmitting);
     } else {
       updatePlan(Id, fields, setSubmitting);
@@ -72,8 +77,8 @@ function AddEdit({ open, Id, onSave, onClose }) {
   }
 
   function updatePlan(id, fields, setSubmitting) {
-    customerService
-      .update(id, fields)
+    billingService
+      .updatePlan(id, fields)
       .then(() => {
         onSave();
       })
@@ -86,7 +91,7 @@ function AddEdit({ open, Id, onSave, onClose }) {
   async function fetchUser(setFieldValue) {
     try {
       setLoading(true);
-      const { user: plan } = await customerService.getById(Id);
+      const plan = await billingService.getPlanById(Id);
       setPlan(plan);
       const fields = ["name", "speed", "price", "description"];
       fields.forEach((field) => {
@@ -111,7 +116,7 @@ function AddEdit({ open, Id, onSave, onClose }) {
           useEffect(() => {
             console.log(`id ${Id}`);
             // if (id !== Id) {
-            if (Id !== -1 && open) {
+            if (Id !== "" && open) {
               fetchUser(setFieldValue);
             }
             return () => {
@@ -232,7 +237,7 @@ function AddEdit({ open, Id, onSave, onClose }) {
                   className="btn basicStyle"
                   icon
                 >
-                  {Id === -1 ? (
+                  {Id === "" ? (
                     <React.Fragment>
                       <Icon name="plus" />
                       Add

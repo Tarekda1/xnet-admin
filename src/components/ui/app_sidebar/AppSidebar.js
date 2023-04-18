@@ -22,7 +22,7 @@ function AppSidebar(props) {
         direction={"left"}
         visible={user.role == "Admin" && visible}
       >
-        <Menu.Item>
+        <Menu.Item className="logo">
           <Link to="/admin" className="sidebar__logo">
             {user.role == "AGENT" ? (
               <Image
@@ -53,7 +53,7 @@ function AppSidebar(props) {
         >
           <Icon
             floated="left"
-            name="users"
+            name="user"
             style={{ float: "left", margin: "0px 5px" }}
           />
           <Link to="/admin/users">Users</Link>
@@ -75,10 +75,21 @@ function AppSidebar(props) {
         >
           <Icon
             floated="left"
-            name="plan"
+            name="money bill alternate"
             style={{ float: "left", margin: "0px 5px" }}
           />
           <Link to="/billing/plans">Plans</Link>
+        </Menu.Item>
+        <Menu.Item
+          icon
+          className={location.pathname == "/billing/invoices" ? "active" : ""}
+        >
+          <Icon
+            floated="left"
+            name="money bill alternate"
+            style={{ float: "left", margin: "0px 5px" }}
+          />
+          <Link to="/billing/invoices">Invoices</Link>
         </Menu.Item>
         <Menu.Item
           icon
@@ -86,7 +97,7 @@ function AppSidebar(props) {
         >
           <Icon
             floated="left"
-            name="money"
+            name="list ul"
             style={{ float: "left", margin: "0px 5px" }}
           />
           <Link to="/admin/expenses">Expenses</Link>

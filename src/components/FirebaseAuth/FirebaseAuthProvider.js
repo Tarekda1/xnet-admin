@@ -32,11 +32,17 @@ const FirebaseProvider = ({ children, onRedirectCallback }) => {
   }
 
   useEffect(() => {
-    const user = getCurrentUser(firebase.auth());
-    console.log(`user inside provider: ${user}`);
-    if (!user || user == null) {
-      onRedirectCallback({ targetUrl: "/account/login" });
-    }
+    getCurrentUser(firebase.auth()).then(
+      (user) => {
+        console.log(`user inside provider: ${user}`);
+        if (!user || user == null) {
+          onRedirectCallback({ targetUrl: "/account/login" });
+        }
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
   }, []);
 
   const getTokenSilently = useCallback(

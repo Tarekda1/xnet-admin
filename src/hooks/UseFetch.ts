@@ -72,8 +72,6 @@ function useFetch<REQ = any, RES = any>(): [
   async function handleResponse(response) {
     const text = await response.text();
     const data = text && JSON.parse(text);
-    // console.log("resp", data);
-    // console.log("ok", response.ok);
     if (data.error == "Unauthorized") {
       accountService.logout(() => (window.location.href = "/account/login"));
     } else if (!response.ok) {
@@ -114,7 +112,6 @@ function useFetch<REQ = any, RES = any>(): [
           ...(config.headers || {}),
           ...authHeader(config.url),
         },
-        ...config,
       });
 
       const data = await handleResponse(response);
