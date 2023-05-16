@@ -233,13 +233,6 @@ const index: React.FC = (props) => {
             Id={selectedSubscriber}
             onSave={() => {
               setshowModal(false);
-              //update the model
-              // if (selectedSubscriber === -1) {
-              //   onSaveHandler();
-              // } else {
-              //   //update user data
-              //   onSaveHandler(selectedSubscriber);
-              // }
             }}
             open={showModal}
             onClose={() => {

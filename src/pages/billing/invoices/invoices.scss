@@ -1,0 +1,17 @@
+.toolbar{
+ display: flex;
+ flex-direction: row;
+ justify-content: space-between;
+ align-items: center;
+}
+
+.no__margin{
+  margin: 0 !important;
+}
+
+.plans__table {
+    overflow-x: hidden;
+    overflow-y: scroll;
+    height: 100%;
+    max-height: calc(100vh - 250px);
+}
