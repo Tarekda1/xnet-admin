@@ -11,7 +11,7 @@ import { debounce } from "lodash";
 import { useDispatch, useSelector, shallowEqual } from "react-redux";
 import { Segment, Input, Button, Table, Icon } from "semantic-ui-react";
 import styled from "styled-components";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { customerService } from "../../../services";
 import { Loading } from "../../../components";
 import { globalActions } from "../../../actions/globalActions";
@@ -39,7 +39,7 @@ const ToolBar = memo(({ onSearchSubmit }) => {
   //const [status, setStatus] = useState("all");
   const dispatch = useDispatch();
   const status = useSelector((state) => state.global.status);
-  const history = useHistory();
+  const navigate = useNavigate();
   const [selectedSubscriber, setselectedSubscriber] = useState(-1);
   const [showModal, setshowModal] = useState(false);
   const changeHandler = (e, data) => {
@@ -97,7 +97,7 @@ const ToolBar = memo(({ onSearchSubmit }) => {
           <Button
             className="btn basicStyle"
             icon
-            onClick={() => history.push("/admin/importusers")}
+            onClick={() => navigate("/admin/importusers")}
           >
             <Icon name="file excel" />
             Import Subscribers

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   Grid,
@@ -14,12 +14,14 @@ import userActions from "../../actions/userActions";
 import { useTranslation } from "react-i18next";
 import { accountService, alertService } from "../../services";
 import firebase from "../../components/firebaseutility/firebase";
+import { AuthContext } from "../../context/AuthContext";
 import { useAuthState } from "react-firebase-hooks/auth";
 import routes from "routes/routes";
 import logo from "images/xnet_logo_main.png";
 import { Role } from "../../helpers/Role";
+import { useNavigate } from "react-router-dom";
 
-function Login({ history, location }) {
+function Login() {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const token = useSelector((state: any) => state.user.token);
@@ -28,73 +30,78 @@ function Login({ history, location }) {
   const [password, setPassword] = useState("");
   const [progress, setProgress] = useState(false);
   const isVisible = useRef(true);
+  const { login } = useContext(AuthContext);
+  const navigate = useNavigate();
 
-  async function getCurrentUser(auth) {
-    return new Promise((resolve, reject) => {
-      const unsubscribe = auth.onAuthStateChanged((user) => {
-        unsubscribe();
-        resolve(user);
-      }, reject);
-    });
-  }
+  // async function getCurrentUser(auth) {
+  //   return new Promise((resolve, reject) => {
+  //     const unsubscribe = auth.onAuthStateChanged((user) => {
+  //       unsubscribe();
+  //       resolve(user);
+  //     }, reject);
+  //   });
+  // }
 
   const validationSchema = Yup.object().shape({
     username: Yup.string().required("Username is required"),
     password: Yup.string().required("Password is required"),
   });
 
-  useEffect(() => {
-    // token && sessionStorage.getItem("token")
-    getCurrentUser(firebase.auth()).then((user) => {
-      console.log(`user inside login: ${user}`);
-      if (user !== null && userInfo.role !== undefined) {
-        console.log("role", userInfo.role);
-        console.log("role constant", Role.Admin);
-        if (userInfo.role == Role.Admin) {
-          console.log("/admin");
-          history.push({ pathname: routes.index });
-        } else {
-          const { from } = location.state || { from: { pathname: "/" } };
-          history.push(from);
-        }
-      } else {
-        dispatch(userActions.performLogout());
-      }
-    });
-  }, [token, dispatch]);
+  // useEffect(() => {
+  //   // token && sessionStorage.getItem("token")
+  //   getCurrentUser(firebase.auth()).then((user) => {
+  //     console.log(`user inside login: ${user}`);
+  //     if (user !== null && userInfo.role !== undefined) {
+  //       console.log("role", userInfo.role);
+  //       console.log("role constant", Role.Admin);
+  //       if (userInfo.role == Role.Admin) {
+  //         console.log("/admin");
+  //         history.push({ pathname: routes.index });
+  //       } else {
+  //         const { from } = location.state || { from: { pathname: "/" } };
+  //         history.push(from);
+  //       }
+  //     } else {
+  //       dispatch(userActions.performLogout());
+  //     }
+  //   });
+  // }, [token, dispatch]);
 
-  function onSubmit() {
+  async function onSubmit() {
     let formObj = { username, password };
-    validationSchema
-      .validate(formObj)
-      .then(function (value) {
-        setProgress(true);
-        alertService.clear();
-        accountService
-          .login(username, password)
-          .then((response) => {
-            console.log(response);
-            if (response.token) {
-              const { token, ...userInfo } = response;
-              console.log(token);
-              dispatch(
-                userActions.successfulLogin({
-                  token,
-                  info: userInfo,
-                })
-              );
-              setProgress(false);
-            }
-          })
-          .catch((error) => {
-            setProgress(false);
-            alertService.error(error);
-          });
-      })
-      .catch(function (err) {
-        alertService.error(err);
-        console.log(err);
-      });
+    const value = await validationSchema.validate(formObj);
+    setProgress(true);
+    const resp = await login(username, password);
+    setProgress(false);
+    console.log(resp);
+    navigate("/");
+
+    // alertService.clear();
+    // accountService
+    //   .login(username, password)
+    //   .then((response) => {
+    //     console.log(response);
+    //     if (response.token) {
+    //       const { token, ...userInfo } = response;
+    //       console.log(token);
+    //       dispatch(
+    //         userActions.successfulLogin({
+    //           token,
+    //           info: userInfo,
+    //         })
+    //       );
+    //       setProgress(false);
+    //     }
+    //   })
+    //   .catch((error) => {
+    //     setProgress(false);
+    //     alertService.error(error);
+    //   });
+    // })
+    // .catch(function (err) {
+    //   alertService.error(err);
+    //   console.log(err);
+    // });
   }
 
   const handleReset = () => {};

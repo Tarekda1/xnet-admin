@@ -1,11 +1,12 @@
 import React from "react";
-import { Route, Redirect } from "react-router-dom";
+import { Route } from "react-router-dom";
 import { useAuthState } from "react-firebase-hooks/auth";
 import firebase from "../firebaseutility/firebase";
+import { Login } from "../../routes/pages";
 
 type Props = {
   Component?: React.FC;
-  render?: (props: any) => any;
+  render: React.ReactNode;
   path: string;
   exact: boolean;
 };
@@ -20,22 +21,12 @@ const PrivateRoute: React.FC<Props> = ({
   const [user] = useAuthState(firebase.auth());
 
   if (user == null) {
-    return (
-      <Route {...rest} render={(props) => <Redirect to="/account/login" />} />
-    );
+    return <Route {...rest} element={Login} />;
   }
 
-  const componentRender = (props: any) =>
-    Component ? <Component {...props} /> : null;
+  const componentRender = Component ? <Component /> : render;
 
-  return (
-    <Route
-      exact={exact}
-      path={path}
-      render={render || componentRender}
-      {...rest}
-    />
-  );
+  return <Route {...rest} path={path} element={componentRender} />;
 };
 
 export { PrivateRoute };

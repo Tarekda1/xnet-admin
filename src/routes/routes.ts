@@ -1,5 +1,5 @@
 export default {
-  index: "/dashboard",
+  index: "/",
   login: "/account/login",
   register: "/account/register",
   verifyEmail: "/account/verify-email",

@@ -62,9 +62,8 @@ const globalActions = {
   fetchSubscribers: (params) => {
     return async (dispatch, getState) => {
       try {
-        console.log(params);
         dispatch(globalActions.shouldLoad(true));
-        const data = await customerService.getAllCustomers(params);
+        const data = await customerService.getAllCustomers();
         console.log(data);
         dispatch(globalActions.loadSusbcribers(data));
         dispatch(globalActions.shouldLoad(false));

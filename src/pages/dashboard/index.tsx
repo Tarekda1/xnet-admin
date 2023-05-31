@@ -78,43 +78,30 @@ const ToolBar = ({ onSearchSubmit }) => {
 
 function Dashboard() {
   const userInfo = useSelector((state: any) => state?.user.userInfo);
-  const subscribers = useSelector(
-    (state: any) => state?.global.filteredSubscribers
-  );
+  const subscribers = useSelector((state: any) => state?.global.subscribers);
   const loading = useSelector((state: any) => state?.global.showLoading);
-  const loaded = useSelector((state: any) => state?.global.loaded);
   const dispatch = useDispatch();
-  const tableHeader = [
-    "CustomerID",
-    "Customer Name",
-    "Email",
-    "Phone",
-    "Address",
-    "Plan",
-    "Plan Date",
-    "Status",
-  ];
-  const isVisibleRef = useRef(false);
+  const isMountedRef = useRef(false);
 
   useEffect(() => {
-    isVisibleRef.current = true;
-    if (userInfo.role === Role.Collector) {
+    isMountedRef.current = true;
+    if (isMountedRef.current) {
       dispatch(globalActions.fetchSubscribers());
     }
-
     return () => {
-      isVisibleRef.current = false;
+      isMountedRef.current = false;
     };
   }, [userInfo]);
 
-  useEffect(() => {
-    console.log("filtering not paid");
-    if (loading == false && !_.isEmpty(subscribers))
-      dispatch(
-        globalActions.filterSusbcribers({ status: "not_paid", text: "" })
-      );
-    return () => {};
-  }, [loading]);
+  // useEffect(() => {
+  //   console.log("filtering not paid");
+  //   if (isMountedRef.current) {
+  //     dispatch(globalActions.fetchSubscribers());
+  //   }
+  //   return () => {
+  //     isMountedRef.current = false;
+  //   };
+  // }, [loading, subscribers]);
 
   const AgentDashBoard = () => {
     return (

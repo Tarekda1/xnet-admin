@@ -19,7 +19,7 @@ import {
   Checkbox,
 } from "semantic-ui-react";
 import { useSelector, useDispatch } from "react-redux";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import useFetch from "hooks/UseFetch";
 import styled from "styled-components";
 import { debounce } from "lodash";
@@ -79,7 +79,7 @@ const ToolBar: React.FC<any> = memo(
     const [text, settext] = useState("");
     const dispatch = useDispatch();
     const status = useSelector((state: any) => state?.global?.status);
-    const history = useHistory();
+    const navigate = useNavigate();
     const changeHandler = (e, data) => {
       console.log(data.value);
       settext(data.value);

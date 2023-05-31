@@ -1,4 +1,10 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, {
+  useEffect,
+  useRef,
+  useState,
+  useCallback,
+  useMemo,
+} from "react";
 import { Formik, Form, ErrorMessage } from "formik";
 import _ from "lodash";
 import * as Yup from "yup";
@@ -10,12 +16,14 @@ import {
   Segment,
   Icon,
   Header,
+  Dropdown,
 } from "semantic-ui-react";
 import useFetch from "hooks/UseFetch";
 import { billingService, alertService } from "services";
 import constants from "config/constants";
 import { Loading } from "components/";
 import "./add-edit.scss";
+import { useSelector } from "react-redux";
 
 function AddEdit({ open, Id, onSave, onClose }) {
   const initialState = {
@@ -30,8 +38,24 @@ function AddEdit({ open, Id, onSave, onClose }) {
   const isVisible = useRef(false);
   const [loading, setLoading] = useState(false);
   const [invoice, setInvoice] = useState(initialState);
+  const subscribersState = useSelector(
+    (state: any) => state?.global.filteredSubscribers
+  );
 
-  const [addInvoice, addInvoiceState] = useFetch<{}, Response>();
+  const subscribers = useMemo(() => {
+    console.log(subscribersState);
+    return subscribersState.reduce((acc, subs) => {
+      console.log(subs);
+      acc.push({
+        key: subs.subscriberId,
+        value: subs.subscriberId,
+        text: subs.Username,
+      });
+      return acc;
+    }, []);
+  }, [subscribersState]);
+
+  const [addInvoice] = useFetch<{}, Response>();
 
   const isAddMode = (id) => id === "";
 
@@ -50,10 +74,10 @@ function AddEdit({ open, Id, onSave, onClose }) {
 
   const validationSchema = Yup.object().shape({
     userId: Yup.string().required("susbcribername is required"),
-    dueDate: Yup.number().required("username is required"),
-    issueDate: Yup.string().required("fees is required"),
-    amount: Yup.string().required("username is required"),
-    collector: Yup.string().required("username is required"),
+    dueDate: Yup.number().required("DueDate is required"),
+    issueDate: Yup.string().required("IssueDate is required"),
+    amount: Yup.string().required("Amount is required"),
+    collector: Yup.string().required("collector is required"),
   });
 
   function onSubmit(fields, { setStatus, setSubmitting }) {
@@ -136,21 +160,19 @@ function AddEdit({ open, Id, onSave, onClose }) {
                   <Grid.Column width={8}>
                     <div className="form-group__col">
                       <label>User Id</label>
-                      <Input
-                        name="userId"
-                        placeholder="User"
+                      <Dropdown
+                        placeholder="user"
+                        className="ui selection fluid dropdown"
                         value={invoice.userId}
+                        options={subscribers}
                         onChange={(e, data) => {
                           console.log(data);
                           setFieldValue("userId", data.value);
                           setInvoice({
                             ...invoice,
-                            userId: data.value,
+                            userId: data.value.toString(),
                           });
                         }}
-                        className={
-                          "form-control" + (errors.name ? " is-invalid" : "")
-                        }
                       />
                       <ErrorMessage
                         name="firstName"

@@ -1,6 +1,8 @@
 import { accountService } from "../services";
 import { getToken } from "./utility";
 import constants from "../config/constants";
+import { AuthContext, useAuth } from "../context/AuthContext";
+import { useContext } from "react";
 
 export const fetchWrapper = {
   get,
@@ -78,7 +80,9 @@ function _delete(url) {
 
 function authHeader(url) {
   // return auth header with jwt if user is logged in and request is to the api url
-  const token = getToken();
+  const {
+    currenctUser: { token },
+  } = useContext(AuthContext);
   //const isLoggedIn = user && user.jwtToken;
   const isApiUrl = url.startsWith(constants.API_URL);
   if (token && isApiUrl) {

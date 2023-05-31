@@ -1,11 +1,5 @@
 import React, { useEffect, useCallback, lazy, Suspense } from "react";
-import {
-  Redirect,
-  Route,
-  Switch,
-  useHistory,
-  useLocation,
-} from "react-router-dom";
+import { Route, useNavigate, useLocation } from "react-router-dom";
 import { PrivateRoute, CustomSwitch } from "components";
 import Page from "components/ui/page/page";
 import {
@@ -38,114 +32,96 @@ const withSuspense = (WrappedComponent) => {
 };
 
 export const FirebaseProvider = withSuspense(
-  lazy(() => import("../components/FirebaseAuth/FirebaseAuthProvider"))
+  lazy(() => import("../context/AuthContext"))
 );
 
 const Router: React.FC = () => {
   const location = useLocation();
-  const history = useHistory();
+  const navigate = useNavigate();
 
-  const onRedirectCb = useCallback(
-    (appState) => {
-      history.push(appState?.targetUrl || location.pathname);
-    },
-    [history, location.pathname]
-  );
-
-  useEffect(() => {
-    const unregister = history.listen((l, action) => {
-      if (action !== "POP") {
-        // Scroll to top on navigation change
-        window.scrollTo(0, 0);
-      }
-    });
-
-    return () => unregister();
+  const onRedirectCb = useCallback(() => {
+    navigate("/account/login");
   }, [history]);
+
+  // useEffect(() => {
+  //   const unregister = navigate.listen((l, action) => {
+  //     if (action !== "POP") {
+  //       // Scroll to top on navigation change
+  //       window.scrollTo(0, 0);
+  //     }
+  //   });
+
+  //   return () => unregister();
+  // }, [navigate]);
 
   return (
     <React.StrictMode>
       <FirebaseProvider onRedirectCallback={onRedirectCb}>
         <CustomSwitch>
-          <PrivateRoute
-            exact
+          <Route
             path={routes.index}
-            render={() => (
+            element={
               <Page>
                 <Dashboard />
               </Page>
-            )}
+            }
           />
-          <Route exact path={routes.login} component={Login} />
-          <Route exact path={routes.register} component={Register} />
-          <Route exact path={routes.verifyEmail} component={VerifyEmail} />
-          <PrivateRoute
-            exact
-            path={routes.forgotPassword}
-            component={ForgotPassword}
-          />
-          <PrivateRoute path={routes.resetPassword} component={ResetPassword} />
-          <PrivateRoute
-            exact
+          <Route path={routes.login} element={<Login />} />
+          <Route path={routes.register} element={Register} />
+          <Route path={routes.verifyEmail} element={VerifyEmail} />
+          <Route path={routes.forgotPassword} Component={ForgotPassword} />
+          <Route path={routes.resetPassword} element={ResetPassword} />
+          <Route
             path={routes.subsribers}
-            render={() => (
+            element={
               <Page>
                 <Subscribers />
               </Page>
-            )}
+            }
           />
-          <PrivateRoute
-            exact
+          <Route
             path={routes.users}
-            render={() => (
+            element={
               <Page>
                 <ListUsers />
               </Page>
-            )}
+            }
           />
-          <PrivateRoute
-            exact
+          <Route
             path={routes.importUsers}
-            render={() => (
+            element={
               <Page>
                 <ImportUsers />
               </Page>
-            )}
+            }
           />
           <Route
-            exact
             path={routes.expenses}
-            render={() => (
+            element={
               <Page>
                 <Expenses />
               </Page>
-            )}
+            }
           />
-          <Route exact path={routes.addEditUsers} component={AddEdit} />
+          <Route path={routes.addEditUsers} element={AddEdit} />
+          <Route path={`${routes.addEditUsers}/:id`} element={AddEdit} />
           <Route
-            exact
-            path={`${routes.addEditUsers}/:id`}
-            component={AddEdit}
-          />
-          <Route
-            exact
             path={routes.plans}
-            render={() => (
+            element={
               <Page>
                 <Plans />
               </Page>
-            )}
+            }
           />
           <Route
-            exact
             path={routes.invoices}
-            render={() => (
+            element={
               <Page>
                 <Invoices />
               </Page>
-            )}
+            }
           />
-          <Route path="*" component={NotFoundPage} />
+          <Route path="*" element={NotFoundPage} />
         </CustomSwitch>
       </FirebaseProvider>
     </React.StrictMode>

@@ -1,19 +1,22 @@
-import React, { useState, useEffect } from "react";
-import { useHistory, Link, useLocation } from "react-router-dom";
+import React, { useState, useEffect, useContext } from "react";
+import { useHistory, Link, useLocation, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
+import { AuthContext, useAuth } from "../../../context/AuthContext";
 import { getToken } from "../../../helpers/utility";
 import { Icon, Menu, Sidebar, Image, Header } from "semantic-ui-react";
 import logo from "../../../images/xnet_logo_main.png";
 import "./AppSidebar.scss";
+
 function AppSidebar(props) {
   const language = "en";
   const user = useSelector((state) => state.user.userInfo);
   const visible = useSelector((state) => state.global.showMenu);
   const location = useLocation();
-  const token = getToken();
+  const { currentUser } = useContext(AuthContext);
+  const navigate = useNavigate();
   console.log(location.pathname);
 
-  return token ? (
+  return currentUser ? (
     <Sidebar.Pushable>
       <Sidebar
         as={Menu}
@@ -23,7 +26,7 @@ function AppSidebar(props) {
         visible={user.role == "Admin" && visible}
       >
         <Menu.Item className="logo">
-          <Link to="/admin" className="sidebar__logo">
+          <Link to="/" className="sidebar__logo">
             {user.role == "AGENT" ? (
               <Image
                 className="agent__logo"
@@ -38,17 +41,19 @@ function AppSidebar(props) {
         </Menu.Item>
         <Menu.Item
           icon
-          className={location.pathname == "/dashboard" ? "active" : ""}
+          onClick={() => navigate("/")}
+          className={location.pathname == "/" ? "active" : ""}
         >
           <Icon
             floated="left"
             name="dashboard"
             style={{ float: "left", margin: "0px 5px" }}
           />
-          <Link to="/dashboard">Dashboard</Link>
+          Dashboard
         </Menu.Item>
         <Menu.Item
           icon
+          onClick={() => navigate("/admin/users")}
           className={location.pathname == "/admin/users" ? "active" : ""}
         >
           <Icon
@@ -60,6 +65,7 @@ function AppSidebar(props) {
         </Menu.Item>
         <Menu.Item
           icon
+          onClick={() => navigate("/admin/subscribers")}
           className={location.pathname == "/admin/subscribers" ? "active" : ""}
         >
           <Icon
@@ -67,10 +73,11 @@ function AppSidebar(props) {
             name="users"
             style={{ float: "left", margin: "0px 5px" }}
           />
-          <Link to="/admin/subscribers">Subscribers</Link>
+          Subscribers
         </Menu.Item>
         <Menu.Item
           icon
+          onClick={() => navigate("/billing/plans")}
           className={location.pathname == "/billing/plans" ? "active" : ""}
         >
           <Icon
@@ -78,10 +85,11 @@ function AppSidebar(props) {
             name="money bill alternate"
             style={{ float: "left", margin: "0px 5px" }}
           />
-          <Link to="/billing/plans">Plans</Link>
+          Plans
         </Menu.Item>
         <Menu.Item
           icon
+          onClick={() => navigate("/billing/invoices")}
           className={location.pathname == "/billing/invoices" ? "active" : ""}
         >
           <Icon
@@ -89,10 +97,11 @@ function AppSidebar(props) {
             name="money bill alternate"
             style={{ float: "left", margin: "0px 5px" }}
           />
-          <Link to="/billing/invoices">Invoices</Link>
+          Invoices
         </Menu.Item>
         <Menu.Item
           icon
+          onClick={() => navigate("/admin/expense")}
           className={location.pathname == "/admin/expenses" ? "active" : ""}
         >
           <Icon
@@ -100,7 +109,7 @@ function AppSidebar(props) {
             name="list ul"
             style={{ float: "left", margin: "0px 5px" }}
           />
-          <Link to="/admin/expenses">Expenses</Link>
+          Expenses
         </Menu.Item>
       </Sidebar>
       <Sidebar.Pusher

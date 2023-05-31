@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Switch, useLocation } from "react-router-dom";
+import { Routes, useLocation } from "react-router-dom";
 import TopBarProgress from "react-topbar-progress-indicator";
 
 const CustomSwitch = ({ children }) => {
@@ -19,7 +19,7 @@ const CustomSwitch = ({ children }) => {
   return (
     <>
       {progress && <TopBarProgress />}
-      <Switch>{children}</Switch>
+      <Routes>{children}</Routes>
     </>
   );
 };

@@ -2,7 +2,7 @@
   "name": "xnet-admin",
   "version": "1.0.0",
   "license": "MIT",
-  "homepage": "/dashboard",
+  "homepage": "/",
   "scripts": {
     "start": "cross-env HTTPS=true react-scripts start",
     "dev": "cross-env HTTPS=true react-scripts start",
@@ -41,7 +41,7 @@
     "react-notifications-component": "^2.4.1",
     "react-paginate": "^6.5.0",
     "react-redux": "^7.2.0",
-    "react-router-dom": "^5.0.0",
+    "react-router-dom": "^6.11.2",
     "react-scripts": "^5.0.1",
     "react-topbar-progress-indicator": "^4.1.0",
     "read-excel-file": "^4.0.7",

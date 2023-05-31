@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Options, HeaderListTemplate } from "./Constants";
 import {
   Segment,
@@ -41,7 +41,7 @@ const ImportUsers = () => {
   const dropDownRef = useRef(null);
   const excelHelper = new DataHelper();
   const uploadRef = useRef(null);
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const handleOnDropDownAction = (e, data) => {
     console.log(data.value);

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useContext } from "react";
 import {
   Dropdown,
   Menu,
@@ -15,9 +15,10 @@ import { useSelector, useDispatch } from "react-redux";
 import { useTranslation } from "react-i18next";
 import i18n from "../../../Translation";
 import userActions from "../../../actions/userActions";
-import { Link, useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { globalActions } from "../../../actions/globalActions";
 import styles from "./TopNavigation.module.scss";
+import { AuthContext, useAuth } from "../../../context/AuthContext";
 
 const BorderLessSegment = styled(Segment)({
   border: "none!important",
@@ -28,10 +29,10 @@ const BorderLessSegment = styled(Segment)({
 
 const TopNavigation = () => {
   const user = useSelector((state) => state.user.userInfo);
-  const token = useSelector((state) => state.user.token);
+  const { currentUser } = useContext(AuthContext);
   const visible = useSelector((state) => state.global.showMenu);
   const dispatch = useDispatch();
-  const history = useHistory();
+  const navigate = useNavigate();
   const language = useSelector((state) => state.global.language);
   const [selectedLanguage, setSelectedLanguage] = useState("");
 
@@ -69,7 +70,7 @@ const TopNavigation = () => {
   function onDropdownSelection(element, data) {
     if (data.value === "logout") {
       dispatch(userActions.performLogout());
-      history.push("/account/login");
+      navigate("/account/login");
     }
   }
 
@@ -81,7 +82,7 @@ const TopNavigation = () => {
     dispatch(globalActions.toggleMenu(false));
   }, [visible]);
 
-  return token ? (
+  return currentUser ? (
     <Grid stackable className={styles.topNavigationContainer}>
       {/* <Grid.Column className="logo" width={2}>
 				<Link to="/">

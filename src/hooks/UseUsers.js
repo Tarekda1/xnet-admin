@@ -7,19 +7,6 @@ const useUsers = () => {
   const [openDelete, setOpenDelete] = useState(false);
   const [error, seterror] = useState("");
 
-  async function fetchUser() {
-    try {
-      setLoading(true);
-      const usersFromServer = await accountService.getAll();
-      setUsers(usersFromServer.users);
-      setLoading(false);
-    } catch (error) {
-      console.log(error);
-      setLoading(false);
-      seterror(error);
-    }
-  }
-
   async function fetchUserById(id) {
     try {
       const { user } = await accountService.getById(id);
@@ -57,6 +44,18 @@ const useUsers = () => {
   }
 
   useEffect(() => {
+    async function fetchUser() {
+      try {
+        setLoading(true);
+        const usersFromServer = await accountService.getAll();
+        setUsers(usersFromServer.users);
+        setLoading(false);
+      } catch (error) {
+        console.log(error);
+        setLoading(false);
+        seterror(error);
+      }
+    }
     fetchUser();
   }, []);
 

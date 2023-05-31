@@ -2,18 +2,18 @@ import React, { useState, useCallback, useEffect, useContext } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useLocation } from "react-router-dom";
 import firebase from "../firebaseutility/firebase";
-const initialContext = {
-  isAuthenticated: false,
-  user: null,
-  loading: false,
-  isInitialized: false,
-  handleRedirectCallback: () => {},
-  getIdTokenClaims: () => {},
-  loginWithRedirect: () => {},
-  logout: () => {},
-};
+// const initialContext = {
+//   isAuthenticated: false,
+//   user: null,
+//   loading: false,
+//   isInitialized: false,
+//   handleRedirectCallback: () => {},
+//   getIdTokenClaims: () => {},
+//   loginWithRedirect: () => {},
+//   logout: () => {},
+// };
 
-const FirebaseContext = React.createContext(initialContext);
+const FirebaseContext = React.createContext();
 
 export const useFirebaseAuth = () => useContext(FirebaseContext);
 
